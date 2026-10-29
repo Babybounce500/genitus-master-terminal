@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENITUS Master-Terminal — Docs &amp; Stack-Report</title>
+<meta name="description" content="Architektur-Übersicht, Cluster-Referenztabelle, Datenquellen und ein gemeinsames Glossar über den gesamten GENITUS-Stack (~150 Tools, 14 Repos).">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<meta name="theme-color" id="themeColorMeta" content="#f4f7fb">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f7fb;--surface:#ffffff;--panel:#eaf1f5;--border:#d6e2ea;--accent:#b45309;--green:#15803d;--red:#b91c1c;--muted:#5f7277;--text:#1c2e34;--bright:#0b1620;--mono:'JetBrains Mono',monospace;--head:'Orbitron',sans-serif;}
+:root.dark{--bg:#070f13;--surface:#0d171a;--panel:#111e23;--border:#1e2d3d;--accent:#f0c040;--green:#22c55e;--red:#f87171;--muted:#7d97a0;--text:#dceef3;--bright:#f4f7fb;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);line-height:1.6;transition:background .15s,color .15s;}
+.wrap{max-width:1020px;margin:0 auto;padding:30px 22px 70px;}
+.topnav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.backlink{font-size:10.5px;color:var(--muted);text-decoration:none;}
+.backlink:hover{color:var(--accent);}
+#themeToggle{font-family:var(--mono);font-size:10px;color:var(--text);background:var(--panel);padding:8px 13px;border-radius:6px;border:1px solid var(--border);cursor:pointer;}
+#themeToggle:hover{border-color:var(--accent);color:var(--accent);}
+h1{font-family:var(--head);font-size:19px;color:var(--bright);margin-bottom:4px;}
+.subtitle{font-size:10.5px;color:var(--muted);margin-bottom:20px;}
+.callout{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:6px;padding:14px 16px;font-size:11px;line-height:1.75;margin-bottom:22px;}
+.callout b{color:var(--bright);}
+.stat-row{display:flex;gap:24px;flex-wrap:wrap;margin:14px 0 24px;}
+.stat b{font-family:var(--head);font-size:19px;color:var(--bright);display:block;}
+.stat span{font-size:7.8px;color:var(--muted);letter-spacing:1px;}
+h2{font-family:var(--head);font-size:13.5px;letter-spacing:1px;color:var(--accent);margin:32px 0 12px;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:8px;}
+p.lead{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:14px;}
+.table-scroll{overflow-x:auto;margin-bottom:10px;}
+table{width:100%;min-width:720px;border-collapse:collapse;font-size:10.5px;}
+th{text-align:left;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);font-size:8.5px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;}
+td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+td a{color:var(--accent);text-decoration:none;}
+td a:hover{text-decoration:underline;}
+.type-badge{font-size:8px;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:999px;white-space:nowrap;display:inline-block;}
+.type-shell{background:rgba(180,83,9,.12);color:var(--accent);}
+.type-hub{background:rgba(21,128,61,.12);color:var(--green);}
+.type-standalone{background:rgba(95,114,119,.14);color:var(--muted);}
+.term{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:10px;}
+.term b{color:var(--bright);font-family:var(--head);font-size:11px;}
+.term p{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.7;}
+.term .used-in{font-size:9px;color:var(--accent);margin-top:6px;}
+.datasrc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:10px;}
+.datasrc b{color:var(--bright);}
+.datasrc p{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.75;}
+.footer-note{font-size:9.5px;color:var(--muted);margin-top:36px;padding-top:16px;border-top:1px solid var(--border);line-height:1.7;}
+.footer-note a{color:var(--accent);}
+@media (max-width:640px){.stat-row{gap:16px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav">
+    <a href="index.html" class="backlink">← Zurück zum Master-Terminal</a>
+    <button id="themeToggle" type="button">🌙 Dark Mode</button>
+  </div>
+  <h1>📚 GENITUS Stack — Docs &amp; Report</h1>
+  <div class="subtitle">Architektur, Cluster-Referenz, Datenquellen und ein gemeinsames Glossar über den gesamten Stack</div>
+
+  <div class="callout">
+  <b>Was das hier ist:</b> keine neue Behauptung, sondern die Zusammenfassung dessen, was über alle 14
+  GENITUS-Cluster hinweg tatsächlich gebaut wurde -- als Nachschlagewerk für jeden, der sich im
+  <a href="index.html">Master-Terminal</a> zurechtfinden will, ohne jede einzelne Kachel selbst öffnen zu müssen.
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><b>14</b><span>GITHUB-REPOS / CLUSTER</span></div>
+    <div class="stat"><b>~150</b><span>EINZEL-TOOLS INSGESAMT</span></div>
+    <div class="stat"><b>0</b><span>EIGENE BACKEND-SERVER</span></div>
+    <div class="stat"><b>3</b><span>NAVIGATIONS-MUSTER</span></div>
+  </div>
+
+  <h2 id="architektur">Architektur: Hub-der-Hubs</h2>
+  <p class="lead">Jeder Cluster ist ein eigenständiges, statisches GitHub-Pages-Repo unter
+  <code>babybounce500.github.io/&lt;repo&gt;/</code> -- derselben Origin, nur unterschiedliche Pfade. Kein Cluster
+  hat einen eigenen Datenbank-Server; jede Seite holt sich Daten entweder live per Client-seitigem Fetch
+  (EOD-Proxy, Yahoo-Finance-Endpunkte, freie öffentliche APIs) oder liest eine vorab generierte JSON-Datei,
+  die bei einem früheren Build-Lauf einmal berechnet und ins Repo committed wurde. Drei Navigations-Muster
+  kommen wiederkehrend vor:</p>
+  <div class="datasrc"><b>Sidebar-Shell</b><p>Eine feste linke Navigation mit Kategorien, Klick öffnet die
+  gewählte Unter-Seite als Tab in einem Iframe-Bereich rechts, offene Tabs bleiben per localStorage über
+  Sessions hinweg erhalten. Verwendet von Dividend-, Corporate- und Charts-Terminal-Workshell.</p></div>
+  <div class="datasrc"><b>Tile-Hub</b><p>Eine Kachel-Übersicht mit Kurzbeschreibung pro Unterseite, Klick
+  führt zur vollen Seite in neuem Tab -- kein persistenter Tab-Zustand. Verwendet von World-Data,
+  Midpoint-Strategien-Terminal, GoldShield-Workshell und diesem Master-Terminal selbst.</p></div>
+  <div class="datasrc"><b>Standalone</b><p>Eine einzelne Seite ohne übergeordnete Navigation -- Ticker-Terminal,
+  Charts-Bot und alle Einzel-Reports fallen in diese Kategorie.</p></div>
+
+  <h2 id="cluster">Cluster-Referenz</h2>
+  <p class="lead">Dieselben 14 Cluster wie im Master-Terminal, hier als reine Tabelle statt als Kacheln --
+  nützlich zum schnellen Nachschlagen oder Verlinken.</p>
+  <div class="table-scroll">
+  <table>
+  <thead><tr><th>Cluster</th><th>Typ</th><th class="num">Tools</th><th>URL</th></tr></thead>
+  <tbody>
+  <tr><td>Dividend-Workshell</td><td><span class="type-badge type-shell">Sidebar-Shell</span></td><td class="num">32</td><td><a href="https://babybounce500.github.io/genitus-workshell/" target="_blank" rel="noopener noreferrer">genitus-workshell</a></td></tr>
+  <tr><td>Corporate-Workshell</td><td><span class="type-badge type-shell">Sidebar-Shell</span></td><td class="num">9</td><td><a href="https://babybounce500.github.io/genitus-corporate-workshell/" target="_blank" rel="noopener noreferrer">genitus-corporate-workshell</a></td></tr>
+  <tr><td>Charts-Terminal-Suite</td><td><span class="type-badge type-shell">Sidebar-Shell</span></td><td class="num">35</td><td><a href="https://babybounce500.github.io/genitus-charts-terminal/master-archiv.html" target="_blank" rel="noopener noreferrer">genitus-charts-terminal</a></td></tr>
+  <tr><td>Charts-Bot</td><td><span class="type-badge type-standalone">Standalone</span></td><td class="num">1</td><td><a href="https://babybounce500.github.io/genitus-charts-bot/" target="_blank" rel="noopener noreferrer">genitus-charts-bot</a></td></tr>
+  <tr><td>Ticker-Terminal</td><td><span class="type-badge type-standalone">Standalone</span></td><td class="num">1</td><td><a href="https://babybounce500.github.io/genitus-ticker-terminal/" target="_blank" rel="noopener noreferrer">genitus-ticker-terminal</a></td></tr>
+  <tr><td>Midpoint-Strategien-Terminal</td><td><span class="type-badge type-hub">Tile-Hub</span></td><td class="num">18</td><td><a href="https://babybounce500.github.io/genitus-midpoint-terminal/strategies-hub.html" target="_blank" rel="noopener noreferrer">genitus-midpoint-terminal</a></td></tr>
+  <tr><td>World-Data</td><td><span class="type-badge type-hub">Tile-Hub</span></td><td class="num">37</td><td><a href="https://babybounce500.github.io/genitus-world-data/" target="_blank" rel="noopener noreferrer">genitus-world-data</a></td></tr>
+  <tr><td>GoldShield AI Analysis Archive</td><td><span class="type-badge type-hub">Tile-Hub + Mini-PWA</span></td><td class="num">15</td><td><a href="https://babybounce500.github.io/goldshield-ai-analysis-archive/workshell.html" target="_blank" rel="noopener noreferrer">goldshield-ai-analysis-archive</a></td></tr>
+  <tr><td>GENITUS Case Study</td><td><span class="type-badge type-standalone">Standalone</span></td><td class="num">1</td><td><a href="https://babybounce500.github.io/genitus-case-study/" target="_blank" rel="noopener noreferrer">genitus-case-study</a></td></tr>
+  <tr><td>GENITUS KIP Study</td><td><span class="type-badge type-standalone">Standalone</span></td><td class="num">1</td><td><a href="https://babybounce500.github.io/genitus-kip-study/" target="_blank" rel="noopener noreferrer">genitus-kip-study</a></td></tr>
+  <tr><td>Rheinmetall-Report</td><td><span class="type-badge type-standalone">Standalone</span></td><td class="num">1</td><td><a href="https://babybounce500.github.io/genitus-rheinmetall-report/" target="_blank" rel="noopener noreferrer">genitus-rheinmetall-report</a></td></tr>
+  <tr><td>Global 100</td><td><span class="type-badge type-standalone">Standalone</span></td><td class="num">1</td><td><a href="https://babybounce500.github.io/genitus-global-100/" target="_blank" rel="noopener noreferrer">genitus-global-100</a></td></tr>
+  <tr><td>AI-Fachvokabular-Glossar</td><td><span class="type-badge type-standalone">Standalone</span></td><td class="num">1</td><td><a href="https://babybounce500.github.io/ai-fachvokabular-glossar/" target="_blank" rel="noopener noreferrer">ai-fachvokabular-glossar</a></td></tr>
+  <tr><td>GitHub-Repos-Hub</td><td><span class="type-badge type-standalone">Standalone (extern)</span></td><td class="num">—</td><td><a href="https://ebooks-auflag-2.replit.app/github-repos/" target="_blank" rel="noopener noreferrer">ebooks-auflag-2.replit.app</a></td></tr>
+  </tbody>
+  </table>
+  </div>
+
+  <h2 id="datenquellen">Datenquellen</h2>
+  <p class="lead">Nicht jedes einzelne der ~150 Tools wurde individuell auditiert -- das hier sind die
+  Muster, die über mehrere Cluster hinweg wiederkehren und direkt aus den jeweiligen Seiten/Beschreibungen
+  bestätigt sind:</p>
+  <div class="datasrc"><b>EOD-Proxy (theserver-open-ai.replit.app)</b><p>Trägt die GoldShield-AI-Analysis-Archive-Suite:
+  historische und Echtzeit-Kurse für Aktien, Krypto, Forex und Indizes, CORS-offen, kein eigener Backend-Server
+  nötig. <code>/eod/historical/{symbol}</code> und <code>/eod/realtime/{symbol}</code>.</p></div>
+  <div class="datasrc"><b>Yahoo-Finance-Endpunkte (live)</b><p>Mehrere Dividend-/Risk-Tools (u.a. "Live Risk")
+  rechnen Sharpe/Sortino/VaR direkt aus täglichen Live-Kursdaten, ohne zwischengeschalteten Cache.</p></div>
+  <div class="datasrc"><b>Kostenlose öffentliche APIs &amp; GitHub-Repos</b><p>Der gesamte World-Data-Cluster
+  (36+10 Dashboards) baut laut eigener Beschreibung ausschließlich auf kostenlosen öffentlichen Datenquellen
+  auf -- keine kostenpflichtigen Lizenzen.</p></div>
+  <div class="datasrc"><b>Vorab generierte JSON-Snapshots</b><p>Backtest- und Scoring-lastige Seiten (Composite-Score,
+  Midpoint-Konfluenz-Backtest, Dividend-Markov-Simulator u.a.) laden eine einmal berechnete, ins Repo committete
+  JSON-Datei -- keine Live-Neuberechnung bei jedem Seitenaufruf, dafür reproduzierbare, zitierfähige Zahlen.</p></div>
+
+  <h2 id="glossar">Gemeinsames Glossar</h2>
+  <p class="lead">Begriffe, die in mehreren Clustern vorausgesetzt werden. Cluster-spezifische Glossare
+  (z.B. GoldShield hat ein eigenes, tieferes) bleiben zusätzlich in ihrem jeweiligen Cluster bestehen.</p>
+
+  <div class="term"><b>Sharpe Ratio</b><p>Rendite pro Einheit Risiko: Ø Rendite geteilt durch die
+  Standardabweichung der Renditen. Höher = besseres Risiko-Rendite-Verhältnis. In mehreren Clustern leicht
+  unterschiedlich annualisiert (×√52 bei wöchentlichen, ×√252 bei täglichen Daten) -- beim Vergleich zwischen
+  Clustern immer auf die Methodik der jeweiligen Seite achten.</p></div>
+  <div class="term"><b>Health-Score / Piotroski F-Score</b><p>Bilanzqualitäts-Kennzahl (0-9 Punkte) aus
+  Rentabilität, Verschuldung und Effizienz-Kennzahlen. Kern-Baustein von Bilanz-Terminal/-Screener und des
+  Composite-Scores.</p></div>
+  <div class="term"><b>Magic Formula</b><p>Earnings Yield + ROIC kombiniert -- Greenblatt-Ansatz, sucht
+  billige Unternehmen mit hoher Kapitalrendite.</p></div>
+  <div class="term"><b>Konfluenz-Score (Midpoint)</b><p>Summe aus 4 Zeitfenster-Signalen (1M/3M/6M/1Y): Kurs
+  über/unter dem Mittelpunkt (Midpoint) seiner Hoch-Tief-Spanne, je +1/-1/0. Bereich -4 bis +4. Kern des
+  Midpoint-Strategien-Terminals.</p></div>
+  <div class="term"><b>CAGR</b><p>Compound Annual Growth Rate -- geglättete Jahres-Wachstumsrate über einen
+  Zeitraum, z.B. für Dividenden-Wachstum (5/10/20 Jahre).</p></div>
+  <div class="term"><b>Markov-Kette</b><p>Zustands-Modell (z.B. Dividende: Increase/Flat/Cut/Suspended) mit
+  Übergangswahrscheinlichkeiten, oft kombiniert mit Monte-Carlo-Vorwärtssimulation für Risikoabschätzung.</p></div>
+  <div class="term"><b>Dividend Aristocrat</b><p>Unternehmen mit 10+/20+/25+ aufeinanderfolgenden Jahren
+  steigender Dividende.</p></div>
+  <div class="term"><b>Chowder Number</b><p>Aktuelle Dividendenrendite + 5-Jahres-Wachstumsrate addiert --
+  Faustregel-Kennzahl für Dividendenwachstums-Qualität.</p></div>
+  <div class="term"><b>Donchian-Kanal / Channel-Breakout</b><p>Kanal = Max/Min der letzten N Schlusskurse
+  (häufig 3 Wochen). Bricht der Kurs darüber/darunter aus, gilt das als Long-/Short-Signal. Kern der
+  GoldShield-Weekly-Breakout-Strategie.</p></div>
+  <div class="term"><b>RSI (Relative Strength Index)</b><p>Momentum-Oszillator 0-100, &lt;30 gilt als
+  überverkauft, &gt;70 als überkauft. In GoldShield als eigenständige Gegentrend-Strategie validiert, in
+  Charts-Terminal als "Signals-Terminal"-Baustein.</p></div>
+  <div class="term"><b>Lookahead-Bias</b><p>Methodik-Fehler, bei dem ein Backtest versehentlich Informationen
+  nutzt, die zum simulierten Zeitpunkt noch gar nicht verfügbar waren -- macht Ergebnisse unrealistisch gut.
+  Alle hier referenzierten Backtests sind explizit als lookahead-frei dokumentiert.</p></div>
+  <div class="term"><b>Max Drawdown</b><p>Größter Rückgang vom bisherigen Hoch zum folgenden Tief einer
+  Equity-Kurve -- Standard-Risikokennzahl neben Sharpe.</p></div>
+
+  <div class="footer-note">
+  AI-generierte, computationale Analyse -- keine Anlageberatung. Diese Doku fasst zusammen, verändert aber
+  nichts an den referenzierten Clustern selbst. Zurück zum <a href="index.html">Master-Terminal</a>.
+  © 2026 GENITUS INC.
+  </div>
+</div>
+<script>
+const THEME_KEY = 'genitus-master:theme';
+const themeBtn = document.getElementById('themeToggle');
+function applyTheme(dark) {
+  document.documentElement.classList.toggle('dark', dark);
+  themeBtn.textContent = dark ? '☀️ Light Mode' : '🌙 Dark Mode';
+  const meta = document.getElementById('themeColorMeta');
+  if (meta) meta.setAttribute('content', dark ? '#070f13' : '#f4f7fb');
+}
+applyTheme(localStorage.getItem(THEME_KEY) === 'dark');
+themeBtn.addEventListener('click', () => {
+  const dark = !document.documentElement.classList.contains('dark');
+  applyTheme(dark);
+  try { localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); } catch (e) {}
+});
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+</script>
+</body>
+</html>
