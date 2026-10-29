@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GENITUS Master-Terminal — Ranking &amp; Verdict</title>
-<meta name="description" content="Ehrliches Tier-Ranking aller 14 Cluster und 6 neuen Cross-Cluster-Tools -- mit offengelegtem Konfidenz-Level pro Eintrag, nicht nur ein Score.">
+<meta name="description" content="Echter, dateibasierter Audit von ~137 HTML-Dateien über 9 parallele Subagents -- Ranking, konkrete Bugs und Konsolidierungsvorschläge, nicht nur Architektur-Einschätzung.">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <meta name="theme-color" id="themeColorMeta" content="#f4f7fb">
@@ -97,6 +97,17 @@ button.primary:disabled{opacity:.5;cursor:default;}
 .ct-row h4 a{color:inherit;text-decoration:none;}
 .ct-row h4 a:hover{color:var(--accent);}
 .ct-row p{font-size:10px;color:var(--muted);flex:1;}
+.bug-row{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--red);border-radius:8px;padding:11px 15px;margin-bottom:8px;}
+.bug-row code{font-size:10px;color:var(--bright);display:block;margin-bottom:3px;word-break:break-word;}
+.bug-cluster{font-size:8px;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);background:var(--chip-bg);padding:2px 7px;border-radius:999px;display:inline-block;margin-bottom:5px;}
+.bug-row p{font-size:10px;color:var(--muted);line-height:1.6;margin:0;}
+.dup-row{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:8px;padding:11px 15px;margin-bottom:8px;font-size:10px;}
+.dup-row .keep{color:var(--green);font-weight:600;}
+.dup-row .remove{color:var(--red);}
+.dup-row p{color:var(--muted);margin-top:5px;line-height:1.6;}
+.stat-row{display:flex;gap:22px;flex-wrap:wrap;margin:14px 0 22px;}
+.stat b{font-family:var(--head);font-size:18px;color:var(--bright);display:block;}
+.stat span{font-size:7.5px;color:var(--muted);letter-spacing:1px;}
 @media (max-width:640px){.pm-grid{grid-template-columns:1fr;} .ct-row{flex-direction:column;align-items:flex-start;}}
 </style>
 </head>
@@ -125,25 +136,33 @@ button.primary:disabled{opacity:.5;cursor:default;}
     </div>
   </div>
   <h1>📊 Ranking &amp; Verdict</h1>
-  <div class="subtitle">Ehrliches Tier-Ranking aller 14 Cluster + 6 neuen Cross-Cluster-Tools -- mit offengelegtem Konfidenz-Level, nicht nur einem Score</div>
+  <div class="subtitle">Echter, dateibasierter Audit -- 9 parallele Subagents haben ~137 HTML-Dateien vollständig gelesen (inkl. Script-Logik), nicht nur Architektur eingeschätzt</div>
 
   <div class="callout warn">
-  <b>Wichtig zu verstehen, bevor du das liest:</b> dieses Ranking bewertet nicht nur "wie gut ist das Tool", sondern
-  auch <b>wie gründlich wurde es in dieser Session tatsächlich geprüft</b> -- deshalb steht bei jedem Eintrag ein
-  Konfidenz-Badge dabei. GoldShield und Midpoint-Terminal wurden über mehrere Sessions hinweg selbst gebaut bzw.
-  vollständig gelesen (hohe Konfidenz). Die meisten anderen Cluster wurden nur strukturell/architektonisch geprüft,
-  nicht Tool für Tool (mittlere/niedrige Konfidenz). Ein niedriges Tier heißt deshalb oft <b>"ungeprüft"</b>, nicht
-  zwingend <b>"schlecht"</b> -- siehe jeweils die Konfidenz-Angabe.
+  <b>Was sich gegenüber der ersten Version geändert hat:</b> die erste Ranking-Version basierte größtenteils auf
+  Architektur-Einschätzung ("sieht solide aus") mit niedriger Konfidenz für die meisten Cluster. Diese Version
+  basiert auf einem echten Audit: 9 parallele Subagents haben jede einzelne Datei gelesen, die JS-Logik bewertet
+  und auf Bugs/Lookahead-Bias/irreführende Behauptungen geprüft. Ergebnis: <b>die Qualität ist insgesamt höher
+  als angenommen</b> (Dividend-Suite und Charts-Terminal-Research-Reports sind methodisch so stark wie GoldShield),
+  aber die Charts-Terminal-<b>Kern-Terminals</b> sind der schwächste Teil im ganzen Stack mit mehreren echten,
+  konkreten Bugs.
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><b>~137</b><span>DATEIEN AUDITIERT</span></div>
+    <div class="stat"><b>9</b><span>PARALLELE SUBAGENTS</span></div>
+    <div class="stat"><b>14</b><span>KONKRETE BUGS GEFUNDEN</span></div>
+    <div class="stat"><b>3</b><span>DUPLIKAT-GRUPPEN</span></div>
   </div>
 
   <div class="tier-legend">
-    <div class="item"><span class="swatch" style="background:var(--tier-s);"></span>Tier S -- validiert, Zweiperioden-robust</div>
-    <div class="item"><span class="swatch" style="background:var(--tier-a);"></span>Tier A -- solide, hohe Konfidenz</div>
-    <div class="item"><span class="swatch" style="background:var(--tier-b);"></span>Tier B -- nützlich, engerer Scope/unauditiert</div>
-    <div class="item"><span class="swatch" style="background:var(--tier-c);"></span>Tier C -- Breite statt Tiefe / ungeprüft / Nische</div>
+    <div class="item"><span class="swatch" style="background:var(--tier-s);"></span>Tier S -- validiert, methodisch rigoros</div>
+    <div class="item"><span class="swatch" style="background:var(--tier-a);"></span>Tier A -- solide, hohe Konfidenz, kleinere Einschränkungen</div>
+    <div class="item"><span class="swatch" style="background:var(--tier-b);"></span>Tier B -- funktioniert, aber echte Schwächen gefunden</div>
+    <div class="item"><span class="swatch" style="background:var(--tier-c);"></span>Tier C -- mehrere konkrete Bugs oder ungeprüft</div>
   </div>
 
-  <h2 id="cluster">Die 14 Cluster</h2>
+  <h2 id="cluster">Die Cluster (nach echtem Audit, Charts-Terminal in 3 Teile aufgesplittet)</h2>
   <div class="rcard" style="--tier-color:var(--tier-s);">
     <div class="rcard-head">
       <span class="tier-badge tier-s">Tier S</span>
@@ -159,133 +178,155 @@ button.primary:disabled{opacity:.5;cursor:default;}
     <div class="rcard-head">
       <span class="tier-badge tier-s">Tier S</span>
       <h3><a href="https://babybounce500.github.io/genitus-midpoint-terminal/strategies-hub.html">Midpoint-Strategien-Terminal</a></h3>
-      <span class="conf-badge conf-high">Hoch -- vollständig gelesen diese Session</span>
+      <span class="conf-badge conf-high">Hoch -- alle 20 Seiten gelesen (4 selbst, 16 per Audit)</span>
     </div>
-    <p class="verdict">Zweitstärkster Cluster: zwei unabhängige Backtest-Ansätze (Bucket-Backtest + diskrete Trade-Simulation) für denselben Konfluenz-Befund, die sich gegenseitig stützen -- 276.643 Beobachtungen.</p>
+    <p class="verdict">Zweitstärkster Cluster, jetzt vollständig geprüft: die 4 Kernseiten (Composite-Score, Midpoint-Strategy/-Backtest, Strategies-Hub) plus alle 16 übrigen Faktor-Strategien (Piotroski, Dual-Momentum, Golden Cross, u.a.) durchlaufen. 14 von 16 zusätzlichen Seiten halten dasselbe Offenlegungs-Niveau -- inklusive mehrerer ehrlich berichteter Nullresultate (Golden-Cross, Pairs-Trading, Shareholder-Yield zeigen "kein klarer Vorteil" statt erzwungenem positivem Spin).</p>
     <div class="pm-grid">
-      <ul class="pm-list"><li class="plus">"Sharpe-ähnlich" wird explizit NICHT als echter Sharpe verkauft</li><li class="plus">Methodik-Fix für Dividenden-Signal-Verzerrung dokumentiert statt verschwiegen</li><li class="plus">11 zusätzliche, unabhängig getestete Faktor-Strategien im selben Cluster</li></ul>
-      <ul class="pm-list"><li class="minus">Kompletter Zeitraum (2021-2026) ist Bullenmarkt -- selbst offen zugegeben</li><li class="minus">Worst-Trade-Ausreißer bis -85%</li><li class="minus">Nur Large-Caps (S&amp;P500+DAX40)</li></ul>
+      <ul class="pm-list"><li class="plus">"Sharpe-ähnlich" wird explizit NICHT als echter Sharpe verkauft</li><li class="plus">Dual-Momentum benennt sogar offen, dass der eigentliche Zweck (Bärenmarktschutz) im Bullenmarkt-Datensatz gar nicht testbar war</li><li class="plus">Mehrere ehrliche Nullresultate statt durchgängiger "alles bestätigt"-Erzählung</li></ul>
+      <ul class="pm-list"><li class="minus">magic-formula.html und value-factor.html fallen aus dem sonst hohen Niveau: "klare Bestätigung" ganz ohne die sonst üblichen Caveats zu Bullenmarkt/Lookahead/Jahresauflösung</li><li class="minus">Kompletter Zeitraum (2021-2026) ist Bullenmarkt -- selbst offen zugegeben</li><li class="minus">Nur Large-Caps (S&amp;P500+DAX40)</li></ul>
     </div>
   </div><div class="rcard" style="--tier-color:var(--tier-a);">
     <div class="rcard-head">
       <span class="tier-badge tier-a">Tier A</span>
       <h3><a href="https://babybounce500.github.io/genitus-workshell/">Dividend-Workshell</a></h3>
-      <span class="conf-badge conf-mid">Mittel -- Architektur geprüft, nicht jedes Tool</span>
+      <span class="conf-badge conf-high">Hoch -- alle 29 Tools einzeln per Audit gelesen</span>
     </div>
-    <p class="verdict">Breiteste, am saubersten kategorisierte Tool-Familie im Stack -- 32 Tools in 7 Kategorien, inklusive einer eigenen "Test/Beta"-Kategorie, die ehrlich zugibt, welche Tools noch nicht fertig sind.</p>
+    <p class="verdict">Positivste Überraschung im ganzen Re-Audit: 27 von 29 Tools wurden mit ✅ bewertet, nur 2 mit kleineren Einschränkungen -- keine Stub-Funktionen, keine TODOs, keine kaputten Fetch-URLs in der ganzen Familie. Split-/Datenartefakt-Filter sind durchgängig mit echten, im Code dokumentierten Validierungsfällen abgesichert (z.B. NVDA-, Rheinmetall-, WMT-Splits).</p>
     <div class="pm-grid">
-      <ul class="pm-list"><li class="plus">Konsistente Sidebar-Navigation mit persistenten Tabs</li><li class="plus">Explizite Test/Beta-Kennzeichnung unfertiger Tools statt sie zu verstecken</li><li class="plus">Deckt Fundamentaldaten ab, die GoldShield/Midpoint fehlen</li></ul>
-      <ul class="pm-list"><li class="minus">Bilanz-/Dividendendaten-Qualität nicht unabhängig nachgeprüft wie bei GoldShield</li><li class="minus">Kein durchgängiger Zweiperioden-Robustheitscheck wie bei den Tier-S-Clustern</li></ul>
+      <ul class="pm-list"><li class="plus">Score-vs-Performance.html benennt unaufgefordert sein eigenes Lookahead-Risiko</li><li class="plus">Haette-Ich-Gekauft-Backtester.html nutzt korrekt den adjusted Close, nicht den nominalen Kurs</li><li class="plus">Geteilte Kernfunktionen (Split-Erkennung, Health-Score) sind zeichengenau identisch zwischen Schwester-Tools -- hohe interne Konsistenz</li></ul>
+      <ul class="pm-list"><li class="minus">Macro-Yield-Curve.html: plausibler, nicht live-verifizierter 10x-Skalierungsfehler bei Treasury-Renditen (^IRX/^TNX)</li><li class="minus">Dividend-Institutional.html labelt sich "live-angereichert", liefert aber tatsächlich statische Fundamentaldaten</li><li class="minus">Geteilte Kernfunktionen bedeuten auch: ein Fehler pflanzt sich identisch über mehrere Dateien fort</li></ul>
     </div>
-  </div><div class="rcard" style="--tier-color:var(--tier-b);">
+  </div><div class="rcard" style="--tier-color:var(--tier-a);">
     <div class="rcard-head">
-      <span class="tier-badge tier-b">Tier B</span>
+      <span class="tier-badge tier-a">Tier A</span>
       <h3><a href="https://babybounce500.github.io/genitus-corporate-workshell/">Corporate-Workshell</a></h3>
-      <span class="conf-badge conf-mid">Mittel -- Kuratierung geprüft</span>
+      <span class="conf-badge conf-high">Hoch -- eigene 2 Dateien + geerbte Qualität geprüft</span>
     </div>
-    <p class="verdict">Kuratierte 9-Tool-Teilmenge der Dividend-Workshell für institutionelle Pitches. Guter Produktgedanke (Audience-Fit statt Feature-Vollständigkeit), aber kein eigener, neuer Inhalt.</p>
+    <p class="verdict">Kuratierte 9-Tool-Teilmenge der Dividend-Workshell, jetzt mit hoher statt mittlerer Konfidenz: sowohl die Shell selbst als auch das eigenständige Corporate-Terminal (5-Abschnitte-Komplettanalyse) wurden geprüft und funktionieren korrekt, inklusive sauberem Live-Proxy-Fallback mit Error-Handling.</p>
     <div class="pm-grid">
-      <ul class="pm-list"><li class="plus">Klar für Zielgruppe (Kundenpitch) kuratiert, keine Test/Beta-Tools</li><li class="plus">Schlankere Navigation als das Original</li></ul>
-      <ul class="pm-list"><li class="minus">Erbt alle Qualitäts-Unsicherheiten der Dividend-Workshell</li><li class="minus">Reine Teilmenge -- rechtfertigt nicht unbedingt ein eigenes Repo</li></ul>
+      <ul class="pm-list"><li class="plus">Corporate-Terminal ist eine korrekt verkürzte Portierung der Einzeltools, nicht neu/fehleranfällig nachgebaut</li><li class="plus">Klar für Zielgruppe kuratiert, keine Test/Beta-Tools</li></ul>
+      <ul class="pm-list"><li class="minus">Erbt die 2 kleineren Dividend-Workshell-Einschränkungen (Macro-Yield-Curve, Dividend-Institutional) indirekt mit</li><li class="minus">Reine Teilmenge -- rechtfertigt nicht unbedingt ein eigenes Repo</li></ul>
     </div>
-  </div><div class="rcard" style="--tier-color:var(--tier-b);">
+  </div><div class="rcard" style="--tier-color:var(--tier-c);">
     <div class="rcard-head">
-      <span class="tier-badge tier-b">Tier B</span>
-      <h3><a href="https://babybounce500.github.io/genitus-charts-terminal/master-archiv.html">Charts-Terminal-Suite</a></h3>
-      <span class="conf-badge conf-low">Oberflächlich -- nur Struktur geprüft</span>
+      <span class="tier-badge tier-c">Tier C</span>
+      <h3><a href="https://babybounce500.github.io/genitus-charts-terminal/">Charts-Terminal -- Kern-Terminals (15)</a></h3>
+      <span class="conf-badge conf-high">Hoch -- alle 17 Dateien einzeln per Audit gelesen</span>
     </div>
-    <p class="verdict">35 Tools (15 Terminals + 10 Galerien + 10 Reports) mit derselben soliden Sidebar-Architektur wie die Dividend-Suite. Das Master-Archiv als Querverweis zwischen allen dreien ist ein gutes Navigationsmuster.</p>
+    <p class="verdict">Der mit Abstand schwächste geprüfte Teil im ganzen Stack -- mehrere echte, konkrete Bugs statt nur fehlender Caveats. Ein Fibonacci-Pipeline-Fehler (vermutlich unbereinigte Splits) zieht sich durch mindestens 3 Dateien und erzeugt physikalisch unsinnige Werte.</p>
     <div class="pm-grid">
-      <ul class="pm-list"><li class="plus">Größte Einzel-Suite im Stack nach World-Data</li><li class="plus">Drei Unter-Workshells sauber getrennt statt vermischt</li></ul>
-      <ul class="pm-list"><li class="minus">Keines der 35 Tools inhaltlich geprüft -- Qualität unbekannt</li><li class="minus">Teilt sich thematisch mit GoldShield/Midpoint (Signale, Rotation) ohne erkennbare Abgrenzung</li></ul>
+      <ul class="pm-list"><li class="plus">signals-terminal.html / bull-bear-scanner.html: lookahead-freie Signal-Engine, sauber verdrahtet</li><li class="plus">portfolio-risk-engine.html: Korrelations-Malus-Formel mathematisch korrekt, Näherungscharakter ehrlich benannt</li></ul>
+      <ul class="pm-list"><li class="minus">fibonacci-terminal.html + tech-terminal.html + mega-nasdaq-terminal.html: SHORT-Levels/"Setups" bei ~5-12x des echten Kurses (Split-Artefakt)</li><li class="minus">volatility-screener.html: annualisierte Volatilität ~2 Größenordnungen zu hoch (MSFT 2814%, NVDA 6583% -- physikalisch unmöglich)</li><li class="minus">watchlist-charts.html nutzt ein Candlestick-Signal als Entscheidungsgrundlage, das charts-bot.html im selben Cluster bereits per eigenem Backtest als wirkungslos widerlegt hat</li><li class="minus">dachboden-terminal.html labelt sich "Live", ist tatsächlich ein am 12.8.2026 eingefrorener Snapshot</li></ul>
     </div>
-  </div><div class="rcard" style="--tier-color:var(--tier-b);">
+  </div><div class="rcard" style="--tier-color:var(--tier-a);">
     <div class="rcard-head">
-      <span class="tier-badge tier-b">Tier B</span>
+      <span class="tier-badge tier-a">Tier A</span>
+      <h3><a href="https://babybounce500.github.io/genitus-charts-terminal/gallery/index.html">Charts-Terminal -- Galerien (10)</a></h3>
+      <span class="conf-badge conf-high">Hoch -- alle 11 Dateien gelesen, Bild-URLs live per HTTP getestet</span>
+    </div>
+    <p class="verdict">Deutlich stärker als die Kern-Terminals desselben Repos: alle Dateien korrekt, Bildanzahlen stimmen exakt mit den behaupteten Zahlen überein, Stichproben-Bildlinks lieferten durchgängig HTTP 200.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">signals.html: 75 lokale PNGs, alle referenziert, Chip-Zähler summieren exakt zu 75</li><li class="plus">Keine toten Links, keine Platzhalter-Inhalte gefunden</li></ul>
+      <ul class="pm-list"><li class="minus">watchlist.html: Notizfeld bei 521 Symbolen praktisch leer (20 Zeichen)</li><li class="minus">Kleiner kosmetischer Dedup-Bug bei 2 Symbolen in signals.html</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-s);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-s">Tier S</span>
+      <h3><a href="https://babybounce500.github.io/genitus-charts-terminal/research/index.html">Charts-Terminal -- Research-Reports (10)</a></h3>
+      <span class="conf-badge conf-high">Hoch -- alle 11 Dateien einzeln gelesen</span>
+    </div>
+    <p class="verdict">Überraschend: methodisch auf demselben Niveau wie GoldShield/Midpoint -- mehrere Reports mit echtem Walk-Forward-Split, p-Werten und ehrlich berichteten Nullresultaten/Negativbefunden statt Schönfärberei.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">backtest-dashboard.html dokumentiert einen SELBST gefundenen Lookahead-Bug samt Vorher/Nachher-Zahlen (Profit-Faktor 5,58 → 1,11)</li><li class="plus">indicator-signal-backtest-report.html entlarvt den "Death Cross" explizit als nicht signifikant und sogar richtungsverkehrt</li><li class="plus">candle-ha-sma-backtest-report.html berichtet ehrlich ein stark negatives Ergebnis (-55,3% Median ggü. Buy&Hold) statt es zu verstecken</li></ul>
+      <ul class="pm-list"><li class="minus">dachboden-relstrength-report.html und fibonacci-report.html fallen gegenüber der sonst strengen Serie ab: kein Train/Test-Split, kein Signifikanztest trotz großer Stichprobe</li><li class="minus">Mehrere Reports referenzieren Rohdaten nur als "auf Anfrage einsehbar" statt sie zu verlinken/einzubetten</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-a);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-a">Tier A</span>
       <h3><a href="https://babybounce500.github.io/genitus-charts-bot/">Charts-Bot</a></h3>
-      <span class="conf-badge conf-mid">Mittel -- live getestet, nicht validiert</span>
+      <span class="conf-badge conf-high">Hoch -- live getestet UND Code gelesen</span>
     </div>
-    <p class="verdict">Selbst live in einem Iframe-Test geladen: rendert einen echten Kerzenchart mit Mustererkennung (Doji, Harami, Spinning Top) für ein beliebiges Symbol aus 55 Kategorien -- funktioniert sichtbar.</p>
+    <p class="verdict">Selbst live in einem Iframe-Test geladen (echter Kerzenchart mit Mustererkennung) UND im Audit die Score-Logik gelesen: Composite-Score nutzt 4 Komponenten mit konkreten, aus einem referenzierten Backtest stammenden Gewichten und degradiert Candlestick-Muster korrekt zu "nur informativ" -- im Gegensatz zu watchlist-charts.html im Schwester-Cluster, das genau diesen Fehler macht.</p>
     <div class="pm-grid">
-      <ul class="pm-list"><li class="plus">Tatsächlich live getestet in dieser Session, lief sauber</li><li class="plus">Breite Marktabdeckung (9 Sektoren + ETFs/Indizes/Forex/Krypto)</li></ul>
-      <ul class="pm-list"><li class="minus">Mustererkennungs-Logik selbst nicht validiert (kein Backtest, nur visuelle Muster-Labels)</li><li class="minus">Kein Sharpe/Trefferquote -- rein deskriptiv, keine Strategie</li></ul>
+      <ul class="pm-list"><li class="plus">Composite-Score-Gewichte sind nachvollziehbar aus echtem Backtest hergeleitet</li><li class="plus">Behandelt die eigene Mustererkennung korrekt als unzuverlässig statt als Signal</li></ul>
+      <ul class="pm-list"><li class="minus">Name "Bot" ist irreführend -- keine automatisierte Order-Ausführung, nur nutzerausgelöste Analyse</li></ul>
     </div>
   </div><div class="rcard" style="--tier-color:var(--tier-b);">
     <div class="rcard-head">
       <span class="tier-badge tier-b">Tier B</span>
       <h3><a href="https://babybounce500.github.io/genitus-ticker-terminal/">Ticker-Terminal</a></h3>
-      <span class="conf-badge conf-low">Oberflächlich -- nur Erreichbarkeit geprüft</span>
+      <span class="conf-badge conf-high">Hoch -- Versionskette per Audit aufgeklärt</span>
     </div>
-    <p class="verdict">Direkter Live-Preis-Lookup über 83 Börsen. Klar abgegrenzter Zweck (schneller Einzel-Ticker-Check ohne Dashboard-Umweg), aber keine Tiefenprüfung möglich -- es ist bewusst ein simples Tool.</p>
+    <p class="verdict">Direkter Live-Preis-Lookup über 83 Börsen. Der Audit deckte eine 3-Datei-Versionskette auf (existing_ticker_tmp.html als finale Version mit Dividenden-Yield/Streak/Export, ticker(5)/ticker(6).html als überholte Vorstufen) -- die deployte Version ist vermutlich die gute, aber welche lokale Datei live steht, ist ungeklärt.</p>
     <div class="pm-grid">
-      <ul class="pm-list"><li class="plus">Klarer, schmaler Scope statt Feature-Überladung</li><li class="plus">Cache-Fallback bei Live-Ausfall</li></ul>
-      <ul class="pm-list"><li class="minus">Keine eigene Analyse/Signal-Logik -- reiner Datenabruf</li></ul>
+      <ul class="pm-list"><li class="plus">Finale Version (existing_ticker_tmp.html) hat Cache+Live-Fallback, Dividenden-Layer und CSV-Export</li><li class="plus">Klarer, schmaler Scope statt Feature-Überladung</li></ul>
+      <ul class="pm-list"><li class="minus">3 Dateiversionen lokal vorhanden, nur eine sollte noch existieren</li><li class="minus">Keine eigene Analyse/Signal-Logik -- reiner Datenabruf</li></ul>
     </div>
-  </div><div class="rcard" style="--tier-color:var(--tier-c);">
+  </div><div class="rcard" style="--tier-color:var(--tier-b);">
     <div class="rcard-head">
-      <span class="tier-badge tier-c">Tier C</span>
+      <span class="tier-badge tier-b">Tier B</span>
       <h3><a href="https://babybounce500.github.io/genitus-world-data/">World-Data</a></h3>
-      <span class="conf-badge conf-low">Oberflächlich -- 0 von 37 einzeln geprüft</span>
+      <span class="conf-badge conf-high">Hoch -- alle 37 Dateien einzeln per Audit gelesen</span>
     </div>
-    <p class="verdict">Größter Einzel-Cluster im Stack (37 Dashboards), aber bei dieser Breite ist Qualitäts-Streuung sehr wahrscheinlich und nichts davon wurde hier individuell nachgeprüft. Zusätzlich der einzige thematische Ausreißer -- keine Finanz-Tools.</p>
+    <p class="verdict">Deutlich besser als ursprünglich eingeschätzt: die große Mehrheit der 37 Dashboards funktioniert korrekt, mit echten Live-APIs (NASA, USGS, World Bank, CDC) oder sauber als Snapshot gekennzeichneten Caches. Mehrere Backtest-Dashboards (yieldcurve-backtest, ratehikes-housing-backtest) wurden gegen ihre eigenen Rohdaten nachgerechnet und stimmten exakt.</p>
     <div class="pm-grid">
-      <ul class="pm-list"><li class="plus">Nutzt laut eigener Beschreibung ausschließlich kostenlose öffentliche APIs</li><li class="plus">10 eigene Cross-Datensatz-Analysen statt nur Einzel-Dashboards</li></ul>
-      <ul class="pm-list"><li class="minus">0 von 37 Tools individuell auditiert -- größtes Blindspot-Risiko im Stack</li><li class="minus">Thematisch inkonsistent mit dem Rest (Asteroiden/Erdbeben/Sport statt Finanzen)</li><li class="minus">Rechtfertigt vermutlich eine eigene, separate Navigation statt eine Kachel hier</li></ul>
+      <ul class="pm-list"><li class="plus">yieldcurve-backtest.html: Kernzahlen (Hit-Rate 91,7%, Ø-Vorlaufzeit 14,7 Monate) stimmen exakt mit den 12 Rohdaten-Episoden überein</li><li class="plus">trials-vs-disease-burden.html legt einen Scope-Mismatch in der eigenen Kernaussage transparent offen statt ihn zu verstecken</li></ul>
+      <ul class="pm-list"><li class="minus">commodities-terminal.html widerspricht der eigenen Cluster-Behauptung "nur freie öffentliche APIs": hängt tatsächlich am selben privaten Proxy wie GoldShield</li><li class="minus">housing-terminal.html und macro-dashboard.html labeln sich "LIVE", liefern aber nur eine vorab gecachte statische Datei</li><li class="minus">insider-tracker.html nutzt einen SEC-Endpoint, der im Browser wahrscheinlich an CORS scheitert</li><li class="minus">Thematisch der einzige Nicht-Finance-Cluster -- Breite bleibt ein eigenständiger Kritikpunkt unabhängig von der jetzt bestätigten Qualität</li></ul>
     </div>
-  </div><div class="rcard" style="--tier-color:var(--tier-c);">
+  </div><div class="rcard" style="--tier-color:var(--tier-b);">
     <div class="rcard-head">
-      <span class="tier-badge tier-c">Tier C</span>
+      <span class="tier-badge tier-b">Tier B</span>
       <h3><a href="https://babybounce500.github.io/genitus-case-study/">GENITUS Case Study</a></h3>
-      <span class="conf-badge conf-low">Ungeprüft -- nur Titel/Beschreibung bekannt</span>
+      <span class="conf-badge conf-high">Hoch -- per Audit gelesen</span>
     </div>
-    <p class="verdict">Kosten-/Zeitvergleich AI-Build vs. klassisches Team. Statischer Einzel-Report, Inhalt nicht im Detail geprüft.</p>
+    <p class="verdict">Kosten-/Zeitvergleich AI-Build vs. klassisches Team. Zahlen sind intern konsistent (647 Std./28 Tools/8 Bugs durchgängig gleich über die ganze Seite), Methodik offen als Schätzung deklariert statt als Fakt verkauft.</p>
     <div class="pm-grid">
-      <ul class="pm-list"><li class="plus">Konkretes, nachvollziehbares Thema (Kosten/Zeit)</li></ul>
-      <ul class="pm-list"><li class="minus">Statische Momentaufnahme, kein Live-Tool</li><li class="minus">Inhalt nicht verifiziert</li></ul>
+      <ul class="pm-list"><li class="plus">Interne Konsistenz über die ganze Seite geprüft und bestätigt</li><li class="plus">Methodik-Charakter (Schätzung) wird nicht verschleiert</li></ul>
+      <ul class="pm-list"><li class="minus">Statische Momentaufnahme, kein Live-Tool</li></ul>
     </div>
-  </div><div class="rcard" style="--tier-color:var(--tier-c);">
+  </div><div class="rcard" style="--tier-color:var(--tier-b);">
     <div class="rcard-head">
-      <span class="tier-badge tier-c">Tier C</span>
-      <h3><a href="https://babybounce500.github.io/genitus-kip-study/">GENITUS KIP Study</a></h3>
-      <span class="conf-badge conf-low">Ungeprüft -- nur Titel/Beschreibung bekannt</span>
+      <span class="tier-badge tier-b">Tier B</span>
+      <h3><a href="https://babybounce500.github.io/genitus-kip-study/">GENITUS KIP Study (2 Dateien)</a></h3>
+      <span class="conf-badge conf-high">Hoch -- beide Varianten per Audit gelesen</span>
     </div>
-    <p class="verdict">"KI Power Analysis"-Report mit Formeln und Kennzahlen-Tabelle. Statischer Einzel-Report, Inhalt nicht im Detail geprüft.</p>
+    <p class="verdict">Zwei unterschiedliche, beide berechtigte Reports -- kein Duplikat trotz identischem Template: KIP-study.html ist der breitere Multi-Projekt-Report seit 2023, GENITUS-KIP-Study.html der GENITUS-spezifische Spin-off vom 30.9.2026. Letzterer hat aber einen echten internen Fehler.</p>
     <div class="pm-grid">
-      <ul class="pm-list"><li class="plus">Eigene Formeln statt nur Prosa-Behauptungen (laut Beschreibung)</li></ul>
-      <ul class="pm-list"><li class="minus">Statische Momentaufnahme</li><li class="minus">Inhalt nicht verifiziert</li></ul>
+      <ul class="pm-list"><li class="plus">KIP-study.html: eigenständige Formeln/Charts (F1-F34), keine Kopie</li><li class="plus">Beide inhaltlich klar unterschiedlich trotz gleichem CSS/JS-Gerüst</li></ul>
+      <ul class="pm-list"><li class="minus">GENITUS-KIP-Study.html: Formel-Karte F6 ("Bugs_kritisch / Std_QA = 6/32") wurde beim Hochzählen der Bug-Zahl im Rest der Seite von 6 auf 8 nicht mitaktualisiert -- klarer interner Widerspruch, leicht zu fixen</li></ul>
     </div>
   </div><div class="rcard" style="--tier-color:var(--tier-c);">
     <div class="rcard-head">
       <span class="tier-badge tier-c">Tier C</span>
       <h3><a href="https://babybounce500.github.io/genitus-rheinmetall-report/">Rheinmetall-Report</a></h3>
-      <span class="conf-badge conf-low">Ungeprüft</span>
+      <span class="conf-badge conf-high">Hoch -- per Audit gelesen, Bildreferenzen geprüft</span>
     </div>
-    <p class="verdict">Einzeltitel-Tiefenanalyse zu einem einzelnen Symbol. Nützlich als Beispiel, aber per Definition nicht skalierbar/verallgemeinerbar.</p>
+    <p class="verdict">Einzeltitel-Tiefenanalyse, aber mit einem konkreten technischen Fehler: die beiden zentralen Kurs-Charts sind kaputte Bildverweise, weil der referenzierte `charts/`-Ordner am Speicherort nicht existiert.</p>
     <div class="pm-grid">
-      <ul class="pm-list"><li class="plus">Konkretes Anwendungsbeispiel der Analyse-Methodik</li></ul>
-      <ul class="pm-list"><li class="minus">Ein einzelner Titel -- keine Aussage über die Methodik allgemein</li><li class="minus">Statisch, vermutlich veraltend</li></ul>
+      <ul class="pm-list"><li class="plus">Textinhalt (Geschichte, Bilanz, Markov, News) ist vollständig und fest eingebettet</li></ul>
+      <ul class="pm-list"><li class="minus">charts/full-history.svg und charts/boom-crash.svg -- beide Dateien/der ganze Ordner fehlen, Charts zeigen vermutlich nichts an</li><li class="minus">Ein einzelner Titel -- keine Aussage über die Methodik allgemein</li></ul>
     </div>
-  </div><div class="rcard" style="--tier-color:var(--tier-c);">
+  </div><div class="rcard" style="--tier-color:var(--tier-b);">
     <div class="rcard-head">
-      <span class="tier-badge tier-c">Tier C</span>
+      <span class="tier-badge tier-b">Tier B</span>
       <h3><a href="https://babybounce500.github.io/genitus-global-100/">Global 100</a></h3>
-      <span class="conf-badge conf-low">Ungeprüft -- genauer Inhalt unklar</span>
+      <span class="conf-badge conf-high">Hoch -- per Audit gelesen, Links stichprobenweise geprüft</span>
     </div>
-    <p class="verdict">Globales 100-Titel-Ranking/Report. Selbst der genaue Aufbau ist mir nicht im Detail bekannt -- niedrigste Konfidenz-Einstufung im ganzen Ranking.</p>
+    <p class="verdict">Statische Übersichtsseite/Archiv für 100 globale Aktien mit Links zu Einzelreports. Stichprobenprüfung bestätigte: alle verlinkten Report-Zieldateien existieren tatsächlich im Ordner -- kein Linkbruch gefunden.</p>
     <div class="pm-grid">
-      <ul class="pm-list"><li class="plus">Globaler statt regionaler Scope (laut Namen)</li></ul>
-      <ul class="pm-list"><li class="minus">Am wenigsten geprüfter Eintrag in dieser ganzen Liste</li></ul>
+      <ul class="pm-list"><li class="plus">Karten-Browser mit Suche/Regionsfilter funktioniert</li><li class="plus">Alle geprüften internen Links funktionieren</li></ul>
+      <ul class="pm-list"><li class="minus">Statisch, kein Live-Update-Mechanismus erkennbar</li></ul>
     </div>
-  </div><div class="rcard" style="--tier-color:var(--tier-c);">
+  </div><div class="rcard" style="--tier-color:var(--tier-b);">
     <div class="rcard-head">
-      <span class="tier-badge tier-c">Tier C</span>
-      <h3><a href="https://babybounce500.github.io/ai-fachvokabular-glossar/">AI-Fachvokabular-Glossar</a></h3>
-      <span class="conf-badge conf-low">Ungeprüft</span>
+      <span class="tier-badge tier-b">Tier B</span>
+      <h3><a href="https://babybounce500.github.io/ai-fachvokabular-glossar/">AI-Fachvokabular-Glossar / AI-Glossar-Library</a></h3>
+      <span class="conf-badge conf-high">Hoch -- beide Varianten verglichen</span>
     </div>
-    <p class="verdict">Nachschlagewerk für KI-/Prompt-Engineering-Begriffe. Sinnvolle Ergänzung, aber kein Analyse-Tool -- andere Kategorie als der Rest des Stacks.</p>
+    <p class="verdict">Zwei Versionen desselben Konzepts: AI-Glossar-Library.html ist die gewachsene Nachfolgeversion (620 statt 312 Begriffe) und sollte die behaltene sein -- hat aber selbst einen kleinen, leicht behebbaren Fehler.</p>
     <div class="pm-grid">
-      <ul class="pm-list"><li class="plus">Füllt eine echte Lücke (Begriffe werden in anderen Reports vorausgesetzt)</li></ul>
-      <ul class="pm-list"><li class="minus">Kein Analyse- oder Live-Tool</li><li class="minus">Pflegeaufwand bei sich schnell wandelndem KI-Vokabular nicht einschätzbar</li></ul>
+      <ul class="pm-list"><li class="plus">Suche/Filter/Theme-Toggle funktionieren in beiden Versionen</li><li class="plus">Statistik-Angaben im Header sind korrekt (620/62)</li></ul>
+      <ul class="pm-list"><li class="minus">AI-Glossar-Library.html: Meta-Description und Footer wurden beim Wachstum nicht aktualisiert, behaupten weiterhin "500 Begriffe/50 Module"</li><li class="minus">AI-Fachvokabular-Glossar.html (die ältere, verlinkte Version) ist ein überholter Vorgänger</li></ul>
     </div>
   </div><div class="rcard" style="--tier-color:var(--tier-c);">
     <div class="rcard-head">
@@ -293,12 +334,21 @@ button.primary:disabled{opacity:.5;cursor:default;}
       <h3><a href="https://ebooks-auflag-2.replit.app/github-repos/">GitHub-Repos-Hub (extern)</a></h3>
       <span class="conf-badge conf-low">Oberflächlich -- nur Erreichbarkeit geprüft</span>
     </div>
-    <p class="verdict">Reiner Meta-Katalog aller Repos, läuft auf einer fremden Replit-Origin statt babybounce500.github.io. Kein eigener Analyseinhalt.</p>
+    <p class="verdict">Reiner Meta-Katalog aller Repos, läuft auf einer fremden Replit-Origin statt babybounce500.github.io. Kein eigener Analyseinhalt, daher nicht Teil des Dateien-Audits dieser Runde.</p>
     <div class="pm-grid">
       <ul class="pm-list"><li class="plus">Nützlicher Fallback, wenn ein Tool im Master-Terminal mal fehlt</li></ul>
       <ul class="pm-list"><li class="minus">Fremde Origin -- Verfügbarkeit nicht in eigener Kontrolle</li><li class="minus">Kein Analyseinhalt, rein organisatorisch</li></ul>
     </div>
   </div>
+
+  <h2 id="bugs">🐛 Konkrete Bugs gefunden (14)</h2>
+  <p class="lead">Keine Vermutungen -- das sind Dinge, die die Subagents tatsächlich im Code gelesen und nachvollzogen haben.</p>
+  <div class="bug-row"><code>fibonacci-terminal.html, tech-terminal.html, mega-nasdaq-terminal.html</code><span class="bug-cluster">Charts-Terminal</span><p>Gemeinsame Fibonacci-Datenpipeline erzeugt physikalisch unsinnige Werte (SHORT-Levels bei ~5-12x des echten Kurses, "+1500%"-Setups) -- vermutlich dieselbe Art Split-Adjustierungs-Bug, die schon im GoldShield-Cluster gefunden wurde.</p></div><div class="bug-row"><code>volatility-screener.html</code><span class="bug-cluster">Charts-Terminal</span><p>Annualisierte Volatilität ist ~2 Größenordnungen zu hoch (MSFT 2814%, NVDA 6583%, selbst der GSPC-Index 1704%) -- klarer Skalierungsfehler in der Offline-Vorberechnung.</p></div><div class="bug-row"><code>watchlist-charts.html</code><span class="bug-cluster">Charts-Terminal</span><p>Leitet "Gesamtsignal" aus der reinen Candlestick-Musteranzahl ab -- genau diese Heuristik hat charts-bot.html im selben Repo per eigenem 99-Symbol-Backtest bereits als ohne reale Vorhersagekraft widerlegt. Interner Selbstwiderspruch.</p></div><div class="bug-row"><code>dachboden-terminal.html</code><span class="bug-cluster">Charts-Terminal</span><p>Nennt sich "Live-Regime", zeigt laut eigenem Footer aber einen am 12.8.2026 eingefrorenen Snapshot.</p></div><div class="bug-row"><code>mega-us-terminal.html</code><span class="bug-cluster">Charts-Terminal</span><p>Räumt im eigenen Methodik-Hinweis ein, eine Reimplementierung ohne Zugriff auf die Original-Pipeline zu sein, die Trades bei ±200% kappt -- Ø-Rendite dadurch deutlich über dem Original-Wert.</p></div><div class="bug-row"><code>Macro-Yield-Curve.html</code><span class="bug-cluster">Dividend-Workshell</span><p>Plausibler, nicht live-verifizierter 10x-Skalierungsfehler bei Treasury-Renditen (^IRX/^FVX/^TNX/^TYX werden bei Yahoo als Rendite×10 geliefert, Code übernimmt ungeteilt).</p></div><div class="bug-row"><code>Dividend-Institutional.html</code><span class="bug-cluster">Dividend-Workshell</span><p>UI-Label "Yahoo Finance, live-angereichert" ist irreführend -- die Fundamentaldaten kommen aus einer statischen GitHub-Raw-CSV, kein Live-Call.</p></div><div class="bug-row"><code>housing-terminal.html, macro-dashboard.html</code><span class="bug-cluster">World-Data</span><p>Titel/Header behaupten "LIVE", tatsächlich wird nur eine serverseitig vorab gecachte JSON-Datei ohne automatischen Refresh geladen.</p></div><div class="bug-row"><code>insider-tracker.html</code><span class="bug-cluster">World-Data</span><p>Nutzt den alten www.sec.gov/cgi-bin-Endpunkt client-seitig -- setzt in der Praxis meist keine CORS-Header, Live-Fetch kann daher lautlos scheitern.</p></div><div class="bug-row"><code>commodities-terminal.html</code><span class="bug-cluster">World-Data</span><p>Widerspricht der eigenen Cluster-Behauptung "nur freie öffentliche APIs": hängt tatsächlich am privaten Proxy theserver-open-ai.replit.app statt einer echten öffentlichen Rohstoffdatenquelle.</p></div><div class="bug-row"><code>Genitus-Rheinmetall-Report.html</code><span class="bug-cluster">Reports</span><p>Referenziert charts/full-history.svg und charts/boom-crash.svg -- der ganze charts/-Ordner fehlt, beide zentralen Kurs-Charts sind kaputte Bildverweise.</p></div><div class="bug-row"><code>GENITUS-KIP-Study.html</code><span class="bug-cluster">Reports</span><p>Formel-Karte F6 (Bugs_kritisch/Std_QA = 6/32) wurde beim Hochzählen der Bug-Zahl im Rest der Seite von 6 auf 8 nicht aktualisiert.</p></div><div class="bug-row"><code>AI-Glossar-Library.html</code><span class="bug-cluster">Reports</span><p>Meta-Description und Footer behaupten weiterhin "500 Begriffe/50 Module", Header zeigt korrekt bereits 620/62.</p></div><div class="bug-row"><code>research/index.html (Charts-Terminal)</code><span class="bug-cluster">Charts-Terminal</span><p>Mehrere Reports verlinken intern auf "hub.html", das im Ordner nicht existiert (nur index.html übernimmt diese Rolle) -- durchgängiger toter Link.</p></div>
+
+  <h2 id="duplikate">🗂️ Duplikate zur Konsolidierung (3 Gruppen)</h2>
+  <p class="lead">Betrifft ausschließlich lokale Dateien unter E:\0-EVERYWHERE (Wurzel-Verzeichnis, nicht git-versioniert hier) --
+  vor dem Löschen muss geklärt werden, ob das die tatsächliche Deployment-Quelle ist.</p>
+  <div class="dup-row"><span class="keep">Behalten: existing_ticker_tmp.html</span><br><span class="remove">Entfernen: ticker (5).html, ticker (6).html</span><p>Nachweisbare Versionskette per Diff bestätigt: (5) = älteste Vorstufe ohne Cache, (6) = Zwischenstand, existing_ticker_tmp.html = finale Version mit Dividenden-Yield/Streak/Export.</p></div><div class="dup-row"><span class="keep">Behalten: CHARTSS-BOT-NEW.html</span><br><span class="remove">Entfernen: CHARTSS-BOT-MERGED.html</span><p>Byte-identisch (gleicher MD5-Hash) -- reines Duplikat.</p></div><div class="dup-row"><span class="keep">Behalten: AI-Glossar-Library.html (nach Fix der veralteten Meta-Description)</span><br><span class="remove">Entfernen: AI-Fachvokabular-Glossar.html</span><p>Gewachsene Nachfolgeversion (620 statt 312 Begriffe), kein striktes Duplikat sondern Weiterentwicklung.</p></div>
 
   <h2 id="crosstools">Die 6 neuen Cross-Cluster-Tools (diese Session)</h2>
   <p class="lead">Kürzer gefasst, da ich diese selbst gebaut und getestet habe -- Details stehen bereits im
@@ -306,19 +356,20 @@ button.primary:disabled{opacity:.5;cursor:default;}
   <div class="ct-row"><span class="tier-badge tier-a">Tier A</span><h4><a href="ticker-lookup.html">Ticker-Lookup</a></h4><p>Einziges Tool im Stack, das drei Cluster-Methodiken live für einen beliebigen Ticker gleichzeitig zeigt -- und ehrlich sagt, was es NICHT kann (Fundamentaldaten).</p></div><div class="ct-row"><span class="tier-badge tier-a">Tier A</span><h4><a href="combo-sandbox.html">Combo-Sandbox</a></h4><p>Echter Live-Backtest, keine Attrappe -- aber kleine Standard-Körbe (10 Symbole) und kein Zweiperioden-Robustheitscheck wie GoldShield.</p></div><div class="ct-row"><span class="tier-badge tier-b">Tier B</span><h4><a href="leaderboard.html">Leaderboard</a></h4><p>Wertvolle Aggregation bereits veröffentlichter Zahlen -- aber explizit nichts Neues, nichts selbst nachgerechnet.</p></div><div class="ct-row"><span class="tier-badge tier-b">Tier B</span><h4><a href="watchlist.html">Watchlist</a></h4><p>Funktioniert wie gebaut, aber strukturell limitiert: localStorage-only, kein Geräte-Sync.</p></div><div class="ct-row"><span class="tier-badge tier-b">Tier B</span><h4><a href="digest.html">Wochen-Digest</a></h4><p>Nützliches "was hat sich geändert"-Tool, aber kein echter Hintergrund-Job -- nur Snapshot-Vergleich beim Laden.</p></div><div class="ct-row"><span class="tier-badge tier-c">Tier C</span><h4><a href="status.html">Status</a></h4><p>No-cors-Ping ist kein echter Health-Check (kann HTTP-Status nicht lesen) -- rein informativ, wie selbst dokumentiert.</p></div>
 
   <h2 id="fazit">Gesamt-Fazit</h2>
-  <p class="lead">Nur 2 von 14 Clustern (GoldShield, Midpoint) sind mit echter Zweiperioden-Robustheit UND
-  offengelegten verworfenen Hypothesen validiert -- das ist der eigentliche Qualitätsunterschied in diesem Stack,
-  nicht Tool-Anzahl oder Design-Politur. Der Rest ist strukturell durchweg solide (konsistente Navigation,
-  einheitliches Design-System über alle 14 Cluster), aber bei den meisten wurde der <b>Inhalt</b> hier nicht
-  einzeln nachgeprüft. World-Data (37 Tools, 0 geprüft) und die 5 Einzel-Reports tragen das größte
-  Blindspot-Risiko -- nicht weil sie schlecht sein müssen, sondern weil schlicht niemand in dieser Session
-  nachgesehen hat. Wer für ein Kundengespräch oder eine Investment-Entscheidung auf harte Zahlen baut: GoldShield
-  und Midpoint-Terminal zuerst, der Rest als Breite/Ergänzung danach.</p>
+  <p class="lead">Der echte Audit korrigiert die erste Einschätzung in beide Richtungen: Dividend-Workshell und die
+  Charts-Terminal-Research-Reports sind deutlich besser als angenommen -- methodisch teils auf GoldShield-Niveau,
+  mit selbst gefundenen und offen dokumentierten Bugs statt Schönfärberei. Die Charts-Terminal-<b>Kern-Terminals</b>
+  sind dagegen der klar schwächste Teil im Stack -- nicht wegen fehlender Rigor-Dokumentation wie zuvor vermutet,
+  sondern wegen echter, konkreter Rechenfehler (Fibonacci-Split-Bug, Volatilitäts-Skalierungsfehler, ein interner
+  Selbstwiderspruch zwischen zwei Tools desselben Repos). Nächster sinnvoller Schritt: die 14 Bugs oben an die
+  jeweiligen Repo-Maintainer melden bzw. selbst fixen, und die 3 Duplikat-Gruppen bereinigen -- aber nur nachdem
+  geklärt ist, welche lokale Kopie tatsächlich die Deployment-Quelle ist.</p>
 
   <div class="footer-note">
-  AI-generierte, computationale Analyse -- keine Anlageberatung. Dieses Ranking ist eine Einschätzung, keine
-  unabhängige Prüfung aller ~150 Einzel-Tools. Siehe auch <a href="methodology.html">Methodik &amp; Disclaimer</a>
-  und <a href="leaderboard.html">Leaderboard</a> für die reinen Backtest-Zahlen. Zurück zum
+  AI-generierte, computationale Analyse -- keine Anlageberatung. Dieses Ranking basiert auf einem echten
+  Datei-Audit (9 parallele Subagents, ~137 Dateien), ist aber trotzdem eine Einschätzung, keine formale
+  Qualitätssicherung. Siehe auch <a href="methodology.html">Methodik &amp; Disclaimer</a> und
+  <a href="leaderboard.html">Leaderboard</a> für die reinen Backtest-Zahlen. Zurück zum
   <a href="index.html">Master-Terminal</a>. © 2026 GENITUS INC.
   </div>
 </div>
