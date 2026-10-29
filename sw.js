@@ -1,8 +1,9 @@
-const CACHE_NAME = 'genitus-master-terminal-v3';
+const CACHE_NAME = 'genitus-master-terminal-v4';
 const PRECACHE_URLS = [
   './index.html',
   './docs.html',
   './guide.html',
+  './ranking.html',
   './status.html',
   './ticker-lookup.html',
   './leaderboard.html',

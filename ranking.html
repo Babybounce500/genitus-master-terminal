@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENITUS Master-Terminal — Ranking &amp; Verdict</title>
+<meta name="description" content="Ehrliches Tier-Ranking aller 14 Cluster und 6 neuen Cross-Cluster-Tools -- mit offengelegtem Konfidenz-Level pro Eintrag, nicht nur ein Score.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<meta name="theme-color" id="themeColorMeta" content="#f4f7fb">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#f4f7fb;--surface:#ffffff;--panel:#eaf1f5;--border:#d6e2ea;--accent:#b45309;--green:#15803d;--red:#b91c1c;--muted:#5f7277;--text:#1c2e34;--bright:#0b1620;--chip-bg:rgba(11,22,32,.045);--mono:'JetBrains Mono',monospace;--head:'Orbitron',sans-serif;}
+:root.dark{--bg:#070f13;--surface:#0d171a;--panel:#111e23;--border:#1e2d3d;--accent:#f0c040;--green:#22c55e;--red:#f87171;--muted:#7d97a0;--text:#dceef3;--bright:#f4f7fb;--chip-bg:rgba(255,255,255,.05);}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);line-height:1.6;transition:background .15s,color .15s;}
+.wrap{max-width:1020px;margin:0 auto;padding:22px 22px 70px;}
+.wrap.wide{max-width:1320px;}
+.topnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+.brand img{width:36px;height:36px;border-radius:9px;}
+.brand .brand-name{font-family:var(--head);font-size:14px;color:var(--bright);letter-spacing:.3px;}
+.topnav-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;position:relative;}
+.topnav-actions a, .topnav-actions button{font-family:var(--mono);font-size:9.5px;color:var(--text);background:var(--panel);padding:7px 11px;border-radius:6px;text-decoration:none;border:1px solid var(--border);cursor:pointer;white-space:nowrap;}
+.topnav-actions a:hover, .topnav-actions button:hover{border-color:var(--accent);color:var(--accent);}
+.topnav-actions a.active{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb, var(--accent) 10%, transparent);}
+.nav-dropdown{position:relative;}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:190px;box-shadow:0 10px 28px -8px rgba(0,0,0,.25);z-index:50;flex-direction:column;gap:2px;}
+.nav-dropdown-menu.open{display:flex;}
+.nav-dropdown-menu a{background:none;border:none;text-align:left;padding:8px 10px;border-radius:5px;}
+.nav-dropdown-menu a:hover{background:var(--panel);}
+h1{font-family:var(--head);font-size:19px;color:var(--bright);margin-bottom:4px;}
+.subtitle{font-size:10.5px;color:var(--muted);margin-bottom:18px;}
+.backlink{font-size:10.5px;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:10px;}
+.backlink:hover{color:var(--accent);}
+.callout{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:6px;padding:14px 16px;font-size:11px;line-height:1.75;margin-bottom:20px;}
+.callout b{color:var(--bright);}
+.callout.warn{border-left-color:var(--red);}
+h2{font-family:var(--head);font-size:13.5px;letter-spacing:1px;color:var(--accent);margin:30px 0 12px;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:8px;}
+p.lead{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:14px;}
+.stat-row{display:flex;gap:22px;flex-wrap:wrap;margin:14px 0 22px;}
+.stat b{font-family:var(--head);font-size:18px;color:var(--bright);display:block;}
+.stat span{font-size:7.5px;color:var(--muted);letter-spacing:1px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;}
+.card b{color:var(--bright);font-family:var(--head);font-size:11px;}
+.card p{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.7;}
+.table-scroll{overflow-x:auto;margin-bottom:14px;}
+table{width:100%;min-width:600px;border-collapse:collapse;font-size:10.5px;}
+th{text-align:left;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);font-size:8.5px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;}
+td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+td a{color:var(--accent);text-decoration:none;}
+td a:hover{text-decoration:underline;}
+.pos{color:var(--green);} .neg{color:var(--red);}
+.badge{font-size:8px;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:999px;white-space:nowrap;display:inline-block;}
+.badge.long{background:rgba(21,128,61,.14);color:var(--green);}
+.badge.short{background:rgba(185,28,28,.14);color:var(--red);}
+.badge.flat{background:rgba(95,114,119,.14);color:var(--muted);}
+input[type=text], input[type=number]{font-family:var(--mono);font-size:11px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 12px;}
+input[type=text]:focus, input[type=number]:focus{outline:none;border-color:var(--accent);}
+button.primary{font-family:var(--head);font-size:10.5px;letter-spacing:.5px;color:#0b1620;background:var(--accent);border:none;padding:10px 18px;border-radius:6px;cursor:pointer;white-space:nowrap;}
+button.primary:hover{filter:brightness(1.1);}
+button.primary:disabled{opacity:.5;cursor:default;}
+.chip-toggle{font-size:10px;color:var(--text);background:var(--chip-bg);border:1px solid var(--border);padding:7px 12px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.chip-toggle input{cursor:pointer;}
+.loading,.error{font-family:var(--mono);font-size:11px;color:var(--muted);padding:20px 0;text-align:center;}
+.error{color:var(--red);}
+.footer-note{font-size:9.5px;color:var(--muted);margin-top:36px;padding-top:16px;border-top:1px solid var(--border);line-height:1.7;}
+.footer-note a{color:var(--accent);}
+@media (max-width:640px){.stat-row{gap:14px;}}
+
+.wrap{max-width:1100px;}
+:root{--tier-s:#15803d;--tier-a:#0891b2;--tier-b:#b45309;--tier-c:#5f7277;}
+.tier-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+.tier-legend .item{display:flex;align-items:center;gap:7px;font-size:9.5px;color:var(--muted);}
+.tier-legend .swatch{width:10px;height:10px;border-radius:3px;}
+.rcard{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--tier-color);border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.rcard-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+.rcard-head h3{font-family:var(--head);font-size:13px;color:var(--bright);flex:1;}
+.rcard-head h3 a{color:inherit;text-decoration:none;}
+.rcard-head h3 a:hover{color:var(--accent);}
+.tier-badge{font-family:var(--head);font-size:9px;letter-spacing:.5px;padding:3px 9px;border-radius:999px;color:#fff;white-space:nowrap;}
+.tier-badge.tier-s{background:var(--tier-s);} .tier-badge.tier-a{background:var(--tier-a);} .tier-badge.tier-b{background:var(--tier-b);} .tier-badge.tier-c{background:var(--tier-c);}
+.conf-badge{font-size:8px;letter-spacing:.2px;padding:3px 8px;border-radius:999px;white-space:nowrap;border:1px solid var(--border);color:var(--muted);}
+.conf-badge.conf-high{color:var(--green);border-color:var(--green);}
+.conf-badge.conf-mid{color:var(--accent);border-color:var(--accent);}
+.conf-badge.conf-low{color:var(--muted);}
+.verdict{font-size:10.5px;color:var(--text);line-height:1.7;margin-bottom:10px;}
+.pm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.pm-list{list-style:none;font-size:9.5px;line-height:1.8;}
+.pm-list li{padding-left:16px;position:relative;margin-bottom:3px;color:var(--muted);}
+.pm-list li.plus::before{content:'+';position:absolute;left:0;color:var(--green);font-weight:700;}
+.pm-list li.minus::before{content:'−';position:absolute;left:0;color:var(--red);font-weight:700;}
+.ct-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 15px;margin-bottom:7px;}
+.ct-row h4{font-family:var(--head);font-size:11px;color:var(--bright);min-width:150px;}
+.ct-row h4 a{color:inherit;text-decoration:none;}
+.ct-row h4 a:hover{color:var(--accent);}
+.ct-row p{font-size:10px;color:var(--muted);flex:1;}
+@media (max-width:640px){.pm-grid{grid-template-columns:1fr;} .ct-row{flex-direction:column;align-items:flex-start;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav">
+    <a class="brand" href="index.html"><img src="icon-192.png" alt=""><span class="brand-name">GENITUS Master-Terminal</span></a>
+    <div class="topnav-actions">
+      <a href="index.html">🏠 Hub</a>
+      <a href="guide.html">🧭 Guide</a>
+      <a href="ranking.html" class="active">📊 Ranking</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" id="toolsDropdownBtn" type="button">🛠️ Cross-Cluster-Tools ▾</button>
+        <div class="nav-dropdown-menu" id="toolsDropdownMenu">
+          <a href="ticker-lookup.html">🔍 Ticker-Lookup</a>
+          <a href="leaderboard.html">🏆 Leaderboard</a>
+          <a href="combo-sandbox.html">🧪 Combo-Sandbox</a>
+          <a href="watchlist.html">⭐ Watchlist</a>
+          <a href="digest.html">📰 Wochen-Digest</a>
+          <a href="status.html">🩺 Status</a>
+        </div>
+      </div>
+      <a href="docs.html">📚 Docs</a>
+      <a href="methodology.html">⚖️ Methodik</a>
+      <button id="themeToggle" type="button">🌙 Dark Mode</button>
+    </div>
+  </div>
+  <h1>📊 Ranking &amp; Verdict</h1>
+  <div class="subtitle">Ehrliches Tier-Ranking aller 14 Cluster + 6 neuen Cross-Cluster-Tools -- mit offengelegtem Konfidenz-Level, nicht nur einem Score</div>
+
+  <div class="callout warn">
+  <b>Wichtig zu verstehen, bevor du das liest:</b> dieses Ranking bewertet nicht nur "wie gut ist das Tool", sondern
+  auch <b>wie gründlich wurde es in dieser Session tatsächlich geprüft</b> -- deshalb steht bei jedem Eintrag ein
+  Konfidenz-Badge dabei. GoldShield und Midpoint-Terminal wurden über mehrere Sessions hinweg selbst gebaut bzw.
+  vollständig gelesen (hohe Konfidenz). Die meisten anderen Cluster wurden nur strukturell/architektonisch geprüft,
+  nicht Tool für Tool (mittlere/niedrige Konfidenz). Ein niedriges Tier heißt deshalb oft <b>"ungeprüft"</b>, nicht
+  zwingend <b>"schlecht"</b> -- siehe jeweils die Konfidenz-Angabe.
+  </div>
+
+  <div class="tier-legend">
+    <div class="item"><span class="swatch" style="background:var(--tier-s);"></span>Tier S -- validiert, Zweiperioden-robust</div>
+    <div class="item"><span class="swatch" style="background:var(--tier-a);"></span>Tier A -- solide, hohe Konfidenz</div>
+    <div class="item"><span class="swatch" style="background:var(--tier-b);"></span>Tier B -- nützlich, engerer Scope/unauditiert</div>
+    <div class="item"><span class="swatch" style="background:var(--tier-c);"></span>Tier C -- Breite statt Tiefe / ungeprüft / Nische</div>
+  </div>
+
+  <h2 id="cluster">Die 14 Cluster</h2>
+  <div class="rcard" style="--tier-color:var(--tier-s);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-s">Tier S</span>
+      <h3><a href="https://babybounce500.github.io/goldshield-ai-analysis-archive/workshell.html">GoldShield AI Analysis Archive</a></h3>
+      <span class="conf-badge conf-high">Hoch -- eigene Arbeit, mehrere Sessions</span>
+    </div>
+    <p class="verdict">Der mit Abstand am strengsten validierte Cluster im ganzen Stack: 38 getestete Hypothesen, 9 bestätigt, 24 verworfen, 5 gemischt -- und die verworfenen stehen im Forschungsprotokoll genauso sichtbar wie die bestätigten.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Zwei-Perioden-Robustheitscheck bei jedem Fund</li><li class="plus">Echte Fehlerfunde selbst dokumentiert (Split-Adjustierung, SHORT-Compounding-Bug)</li><li class="plus">Hat bereits eigene installierbare Mini-PWA</li></ul>
+      <ul class="pm-list"><li class="minus">Trailing-Stop-Fund ist nachweislich regime-abhängig (nur in trendstarken Phasen)</li><li class="minus">Ein bekannter, nicht rückwirkend korrigierter Datenfehler in älteren Tests</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-s);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-s">Tier S</span>
+      <h3><a href="https://babybounce500.github.io/genitus-midpoint-terminal/strategies-hub.html">Midpoint-Strategien-Terminal</a></h3>
+      <span class="conf-badge conf-high">Hoch -- vollständig gelesen diese Session</span>
+    </div>
+    <p class="verdict">Zweitstärkster Cluster: zwei unabhängige Backtest-Ansätze (Bucket-Backtest + diskrete Trade-Simulation) für denselben Konfluenz-Befund, die sich gegenseitig stützen -- 276.643 Beobachtungen.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">"Sharpe-ähnlich" wird explizit NICHT als echter Sharpe verkauft</li><li class="plus">Methodik-Fix für Dividenden-Signal-Verzerrung dokumentiert statt verschwiegen</li><li class="plus">11 zusätzliche, unabhängig getestete Faktor-Strategien im selben Cluster</li></ul>
+      <ul class="pm-list"><li class="minus">Kompletter Zeitraum (2021-2026) ist Bullenmarkt -- selbst offen zugegeben</li><li class="minus">Worst-Trade-Ausreißer bis -85%</li><li class="minus">Nur Large-Caps (S&amp;P500+DAX40)</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-a);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-a">Tier A</span>
+      <h3><a href="https://babybounce500.github.io/genitus-workshell/">Dividend-Workshell</a></h3>
+      <span class="conf-badge conf-mid">Mittel -- Architektur geprüft, nicht jedes Tool</span>
+    </div>
+    <p class="verdict">Breiteste, am saubersten kategorisierte Tool-Familie im Stack -- 32 Tools in 7 Kategorien, inklusive einer eigenen "Test/Beta"-Kategorie, die ehrlich zugibt, welche Tools noch nicht fertig sind.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Konsistente Sidebar-Navigation mit persistenten Tabs</li><li class="plus">Explizite Test/Beta-Kennzeichnung unfertiger Tools statt sie zu verstecken</li><li class="plus">Deckt Fundamentaldaten ab, die GoldShield/Midpoint fehlen</li></ul>
+      <ul class="pm-list"><li class="minus">Bilanz-/Dividendendaten-Qualität nicht unabhängig nachgeprüft wie bei GoldShield</li><li class="minus">Kein durchgängiger Zweiperioden-Robustheitscheck wie bei den Tier-S-Clustern</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-b);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-b">Tier B</span>
+      <h3><a href="https://babybounce500.github.io/genitus-corporate-workshell/">Corporate-Workshell</a></h3>
+      <span class="conf-badge conf-mid">Mittel -- Kuratierung geprüft</span>
+    </div>
+    <p class="verdict">Kuratierte 9-Tool-Teilmenge der Dividend-Workshell für institutionelle Pitches. Guter Produktgedanke (Audience-Fit statt Feature-Vollständigkeit), aber kein eigener, neuer Inhalt.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Klar für Zielgruppe (Kundenpitch) kuratiert, keine Test/Beta-Tools</li><li class="plus">Schlankere Navigation als das Original</li></ul>
+      <ul class="pm-list"><li class="minus">Erbt alle Qualitäts-Unsicherheiten der Dividend-Workshell</li><li class="minus">Reine Teilmenge -- rechtfertigt nicht unbedingt ein eigenes Repo</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-b);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-b">Tier B</span>
+      <h3><a href="https://babybounce500.github.io/genitus-charts-terminal/master-archiv.html">Charts-Terminal-Suite</a></h3>
+      <span class="conf-badge conf-low">Oberflächlich -- nur Struktur geprüft</span>
+    </div>
+    <p class="verdict">35 Tools (15 Terminals + 10 Galerien + 10 Reports) mit derselben soliden Sidebar-Architektur wie die Dividend-Suite. Das Master-Archiv als Querverweis zwischen allen dreien ist ein gutes Navigationsmuster.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Größte Einzel-Suite im Stack nach World-Data</li><li class="plus">Drei Unter-Workshells sauber getrennt statt vermischt</li></ul>
+      <ul class="pm-list"><li class="minus">Keines der 35 Tools inhaltlich geprüft -- Qualität unbekannt</li><li class="minus">Teilt sich thematisch mit GoldShield/Midpoint (Signale, Rotation) ohne erkennbare Abgrenzung</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-b);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-b">Tier B</span>
+      <h3><a href="https://babybounce500.github.io/genitus-charts-bot/">Charts-Bot</a></h3>
+      <span class="conf-badge conf-mid">Mittel -- live getestet, nicht validiert</span>
+    </div>
+    <p class="verdict">Selbst live in einem Iframe-Test geladen: rendert einen echten Kerzenchart mit Mustererkennung (Doji, Harami, Spinning Top) für ein beliebiges Symbol aus 55 Kategorien -- funktioniert sichtbar.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Tatsächlich live getestet in dieser Session, lief sauber</li><li class="plus">Breite Marktabdeckung (9 Sektoren + ETFs/Indizes/Forex/Krypto)</li></ul>
+      <ul class="pm-list"><li class="minus">Mustererkennungs-Logik selbst nicht validiert (kein Backtest, nur visuelle Muster-Labels)</li><li class="minus">Kein Sharpe/Trefferquote -- rein deskriptiv, keine Strategie</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-b);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-b">Tier B</span>
+      <h3><a href="https://babybounce500.github.io/genitus-ticker-terminal/">Ticker-Terminal</a></h3>
+      <span class="conf-badge conf-low">Oberflächlich -- nur Erreichbarkeit geprüft</span>
+    </div>
+    <p class="verdict">Direkter Live-Preis-Lookup über 83 Börsen. Klar abgegrenzter Zweck (schneller Einzel-Ticker-Check ohne Dashboard-Umweg), aber keine Tiefenprüfung möglich -- es ist bewusst ein simples Tool.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Klarer, schmaler Scope statt Feature-Überladung</li><li class="plus">Cache-Fallback bei Live-Ausfall</li></ul>
+      <ul class="pm-list"><li class="minus">Keine eigene Analyse/Signal-Logik -- reiner Datenabruf</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-c);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-c">Tier C</span>
+      <h3><a href="https://babybounce500.github.io/genitus-world-data/">World-Data</a></h3>
+      <span class="conf-badge conf-low">Oberflächlich -- 0 von 37 einzeln geprüft</span>
+    </div>
+    <p class="verdict">Größter Einzel-Cluster im Stack (37 Dashboards), aber bei dieser Breite ist Qualitäts-Streuung sehr wahrscheinlich und nichts davon wurde hier individuell nachgeprüft. Zusätzlich der einzige thematische Ausreißer -- keine Finanz-Tools.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Nutzt laut eigener Beschreibung ausschließlich kostenlose öffentliche APIs</li><li class="plus">10 eigene Cross-Datensatz-Analysen statt nur Einzel-Dashboards</li></ul>
+      <ul class="pm-list"><li class="minus">0 von 37 Tools individuell auditiert -- größtes Blindspot-Risiko im Stack</li><li class="minus">Thematisch inkonsistent mit dem Rest (Asteroiden/Erdbeben/Sport statt Finanzen)</li><li class="minus">Rechtfertigt vermutlich eine eigene, separate Navigation statt eine Kachel hier</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-c);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-c">Tier C</span>
+      <h3><a href="https://babybounce500.github.io/genitus-case-study/">GENITUS Case Study</a></h3>
+      <span class="conf-badge conf-low">Ungeprüft -- nur Titel/Beschreibung bekannt</span>
+    </div>
+    <p class="verdict">Kosten-/Zeitvergleich AI-Build vs. klassisches Team. Statischer Einzel-Report, Inhalt nicht im Detail geprüft.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Konkretes, nachvollziehbares Thema (Kosten/Zeit)</li></ul>
+      <ul class="pm-list"><li class="minus">Statische Momentaufnahme, kein Live-Tool</li><li class="minus">Inhalt nicht verifiziert</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-c);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-c">Tier C</span>
+      <h3><a href="https://babybounce500.github.io/genitus-kip-study/">GENITUS KIP Study</a></h3>
+      <span class="conf-badge conf-low">Ungeprüft -- nur Titel/Beschreibung bekannt</span>
+    </div>
+    <p class="verdict">"KI Power Analysis"-Report mit Formeln und Kennzahlen-Tabelle. Statischer Einzel-Report, Inhalt nicht im Detail geprüft.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Eigene Formeln statt nur Prosa-Behauptungen (laut Beschreibung)</li></ul>
+      <ul class="pm-list"><li class="minus">Statische Momentaufnahme</li><li class="minus">Inhalt nicht verifiziert</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-c);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-c">Tier C</span>
+      <h3><a href="https://babybounce500.github.io/genitus-rheinmetall-report/">Rheinmetall-Report</a></h3>
+      <span class="conf-badge conf-low">Ungeprüft</span>
+    </div>
+    <p class="verdict">Einzeltitel-Tiefenanalyse zu einem einzelnen Symbol. Nützlich als Beispiel, aber per Definition nicht skalierbar/verallgemeinerbar.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Konkretes Anwendungsbeispiel der Analyse-Methodik</li></ul>
+      <ul class="pm-list"><li class="minus">Ein einzelner Titel -- keine Aussage über die Methodik allgemein</li><li class="minus">Statisch, vermutlich veraltend</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-c);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-c">Tier C</span>
+      <h3><a href="https://babybounce500.github.io/genitus-global-100/">Global 100</a></h3>
+      <span class="conf-badge conf-low">Ungeprüft -- genauer Inhalt unklar</span>
+    </div>
+    <p class="verdict">Globales 100-Titel-Ranking/Report. Selbst der genaue Aufbau ist mir nicht im Detail bekannt -- niedrigste Konfidenz-Einstufung im ganzen Ranking.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Globaler statt regionaler Scope (laut Namen)</li></ul>
+      <ul class="pm-list"><li class="minus">Am wenigsten geprüfter Eintrag in dieser ganzen Liste</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-c);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-c">Tier C</span>
+      <h3><a href="https://babybounce500.github.io/ai-fachvokabular-glossar/">AI-Fachvokabular-Glossar</a></h3>
+      <span class="conf-badge conf-low">Ungeprüft</span>
+    </div>
+    <p class="verdict">Nachschlagewerk für KI-/Prompt-Engineering-Begriffe. Sinnvolle Ergänzung, aber kein Analyse-Tool -- andere Kategorie als der Rest des Stacks.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Füllt eine echte Lücke (Begriffe werden in anderen Reports vorausgesetzt)</li></ul>
+      <ul class="pm-list"><li class="minus">Kein Analyse- oder Live-Tool</li><li class="minus">Pflegeaufwand bei sich schnell wandelndem KI-Vokabular nicht einschätzbar</li></ul>
+    </div>
+  </div><div class="rcard" style="--tier-color:var(--tier-c);">
+    <div class="rcard-head">
+      <span class="tier-badge tier-c">Tier C</span>
+      <h3><a href="https://ebooks-auflag-2.replit.app/github-repos/">GitHub-Repos-Hub (extern)</a></h3>
+      <span class="conf-badge conf-low">Oberflächlich -- nur Erreichbarkeit geprüft</span>
+    </div>
+    <p class="verdict">Reiner Meta-Katalog aller Repos, läuft auf einer fremden Replit-Origin statt babybounce500.github.io. Kein eigener Analyseinhalt.</p>
+    <div class="pm-grid">
+      <ul class="pm-list"><li class="plus">Nützlicher Fallback, wenn ein Tool im Master-Terminal mal fehlt</li></ul>
+      <ul class="pm-list"><li class="minus">Fremde Origin -- Verfügbarkeit nicht in eigener Kontrolle</li><li class="minus">Kein Analyseinhalt, rein organisatorisch</li></ul>
+    </div>
+  </div>
+
+  <h2 id="crosstools">Die 6 neuen Cross-Cluster-Tools (diese Session)</h2>
+  <p class="lead">Kürzer gefasst, da ich diese selbst gebaut und getestet habe -- Details stehen bereits im
+  <a href="guide.html">Guide</a> und in <a href="docs.html">Docs</a>.</p>
+  <div class="ct-row"><span class="tier-badge tier-a">Tier A</span><h4><a href="ticker-lookup.html">Ticker-Lookup</a></h4><p>Einziges Tool im Stack, das drei Cluster-Methodiken live für einen beliebigen Ticker gleichzeitig zeigt -- und ehrlich sagt, was es NICHT kann (Fundamentaldaten).</p></div><div class="ct-row"><span class="tier-badge tier-a">Tier A</span><h4><a href="combo-sandbox.html">Combo-Sandbox</a></h4><p>Echter Live-Backtest, keine Attrappe -- aber kleine Standard-Körbe (10 Symbole) und kein Zweiperioden-Robustheitscheck wie GoldShield.</p></div><div class="ct-row"><span class="tier-badge tier-b">Tier B</span><h4><a href="leaderboard.html">Leaderboard</a></h4><p>Wertvolle Aggregation bereits veröffentlichter Zahlen -- aber explizit nichts Neues, nichts selbst nachgerechnet.</p></div><div class="ct-row"><span class="tier-badge tier-b">Tier B</span><h4><a href="watchlist.html">Watchlist</a></h4><p>Funktioniert wie gebaut, aber strukturell limitiert: localStorage-only, kein Geräte-Sync.</p></div><div class="ct-row"><span class="tier-badge tier-b">Tier B</span><h4><a href="digest.html">Wochen-Digest</a></h4><p>Nützliches "was hat sich geändert"-Tool, aber kein echter Hintergrund-Job -- nur Snapshot-Vergleich beim Laden.</p></div><div class="ct-row"><span class="tier-badge tier-c">Tier C</span><h4><a href="status.html">Status</a></h4><p>No-cors-Ping ist kein echter Health-Check (kann HTTP-Status nicht lesen) -- rein informativ, wie selbst dokumentiert.</p></div>
+
+  <h2 id="fazit">Gesamt-Fazit</h2>
+  <p class="lead">Nur 2 von 14 Clustern (GoldShield, Midpoint) sind mit echter Zweiperioden-Robustheit UND
+  offengelegten verworfenen Hypothesen validiert -- das ist der eigentliche Qualitätsunterschied in diesem Stack,
+  nicht Tool-Anzahl oder Design-Politur. Der Rest ist strukturell durchweg solide (konsistente Navigation,
+  einheitliches Design-System über alle 14 Cluster), aber bei den meisten wurde der <b>Inhalt</b> hier nicht
+  einzeln nachgeprüft. World-Data (37 Tools, 0 geprüft) und die 5 Einzel-Reports tragen das größte
+  Blindspot-Risiko -- nicht weil sie schlecht sein müssen, sondern weil schlicht niemand in dieser Session
+  nachgesehen hat. Wer für ein Kundengespräch oder eine Investment-Entscheidung auf harte Zahlen baut: GoldShield
+  und Midpoint-Terminal zuerst, der Rest als Breite/Ergänzung danach.</p>
+
+  <div class="footer-note">
+  AI-generierte, computationale Analyse -- keine Anlageberatung. Dieses Ranking ist eine Einschätzung, keine
+  unabhängige Prüfung aller ~150 Einzel-Tools. Siehe auch <a href="methodology.html">Methodik &amp; Disclaimer</a>
+  und <a href="leaderboard.html">Leaderboard</a> für die reinen Backtest-Zahlen. Zurück zum
+  <a href="index.html">Master-Terminal</a>. © 2026 GENITUS INC.
+  </div>
+</div>
+<script>
+
+const THEME_KEY = 'genitus-master:theme';
+const themeBtn = document.getElementById('themeToggle');
+function applyTheme(dark) {
+  document.documentElement.classList.toggle('dark', dark);
+  themeBtn.textContent = dark ? '☀️ Light Mode' : '🌙 Dark Mode';
+  const meta = document.getElementById('themeColorMeta');
+  if (meta) meta.setAttribute('content', dark ? '#070f13' : '#f4f7fb');
+}
+applyTheme(localStorage.getItem(THEME_KEY) === 'dark');
+themeBtn.addEventListener('click', () => {
+  const dark = !document.documentElement.classList.contains('dark');
+  applyTheme(dark);
+  try { localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); } catch (e) {}
+});
+const toolsBtn = document.getElementById('toolsDropdownBtn');
+const toolsMenu = document.getElementById('toolsDropdownMenu');
+if (toolsBtn && toolsMenu) {
+  toolsBtn.addEventListener('click', (e) => { e.stopPropagation(); toolsMenu.classList.toggle('open'); });
+  document.addEventListener('click', () => toolsMenu.classList.remove('open'));
+}
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+
+</script>
+</body>
+</html>
