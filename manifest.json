@@ -1,0 +1,19 @@
+{
+  "name": "GENITUS Master-Terminal",
+  "short_name": "Master-Terminal",
+  "description": "Hub-der-Hubs über alle GENITUS-Projekte: Dividend-, Corporate- und Charts-Terminal-Workshells, Ticker-Terminal, Charts-Bot, Midpoint-Strategien-Terminal, World-Data, GoldShield AI Analysis Archive und alle Reports/Studien.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#070f13",
+  "theme_color": "#070f13",
+  "lang": "de",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
