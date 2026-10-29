@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENITUS Master-Terminal — Watchlist</title>
+<meta name="description" content="Eigene Symbole speichern (nur lokal im Browser) und automatisch mit Live-Kanal-/RSI-/Midpoint-Signalen annotiert sehen.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<meta name="theme-color" id="themeColorMeta" content="#f4f7fb">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#f4f7fb;--surface:#ffffff;--panel:#eaf1f5;--border:#d6e2ea;--accent:#b45309;--green:#15803d;--red:#b91c1c;--muted:#5f7277;--text:#1c2e34;--bright:#0b1620;--chip-bg:rgba(11,22,32,.045);--mono:'JetBrains Mono',monospace;--head:'Orbitron',sans-serif;}
+:root.dark{--bg:#070f13;--surface:#0d171a;--panel:#111e23;--border:#1e2d3d;--accent:#f0c040;--green:#22c55e;--red:#f87171;--muted:#7d97a0;--text:#dceef3;--bright:#f4f7fb;--chip-bg:rgba(255,255,255,.05);}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);line-height:1.6;transition:background .15s,color .15s;}
+.wrap{max-width:1020px;margin:0 auto;padding:22px 22px 70px;}
+.wrap.wide{max-width:1320px;}
+.topnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+.brand img{width:36px;height:36px;border-radius:9px;}
+.brand .brand-name{font-family:var(--head);font-size:14px;color:var(--bright);letter-spacing:.3px;}
+.topnav-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;position:relative;}
+.topnav-actions a, .topnav-actions button{font-family:var(--mono);font-size:9.5px;color:var(--text);background:var(--panel);padding:7px 11px;border-radius:6px;text-decoration:none;border:1px solid var(--border);cursor:pointer;white-space:nowrap;}
+.topnav-actions a:hover, .topnav-actions button:hover{border-color:var(--accent);color:var(--accent);}
+.topnav-actions a.active{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb, var(--accent) 10%, transparent);}
+.nav-dropdown{position:relative;}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:190px;box-shadow:0 10px 28px -8px rgba(0,0,0,.25);z-index:50;flex-direction:column;gap:2px;}
+.nav-dropdown-menu.open{display:flex;}
+.nav-dropdown-menu a{background:none;border:none;text-align:left;padding:8px 10px;border-radius:5px;}
+.nav-dropdown-menu a:hover{background:var(--panel);}
+h1{font-family:var(--head);font-size:19px;color:var(--bright);margin-bottom:4px;}
+.subtitle{font-size:10.5px;color:var(--muted);margin-bottom:18px;}
+.backlink{font-size:10.5px;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:10px;}
+.backlink:hover{color:var(--accent);}
+.callout{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:6px;padding:14px 16px;font-size:11px;line-height:1.75;margin-bottom:20px;}
+.callout b{color:var(--bright);}
+.callout.warn{border-left-color:var(--red);}
+h2{font-family:var(--head);font-size:13.5px;letter-spacing:1px;color:var(--accent);margin:30px 0 12px;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:8px;}
+p.lead{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:14px;}
+.stat-row{display:flex;gap:22px;flex-wrap:wrap;margin:14px 0 22px;}
+.stat b{font-family:var(--head);font-size:18px;color:var(--bright);display:block;}
+.stat span{font-size:7.5px;color:var(--muted);letter-spacing:1px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;}
+.card b{color:var(--bright);font-family:var(--head);font-size:11px;}
+.card p{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.7;}
+.table-scroll{overflow-x:auto;margin-bottom:14px;}
+table{width:100%;min-width:600px;border-collapse:collapse;font-size:10.5px;}
+th{text-align:left;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);font-size:8.5px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;}
+td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+td a{color:var(--accent);text-decoration:none;}
+td a:hover{text-decoration:underline;}
+.pos{color:var(--green);} .neg{color:var(--red);}
+.badge{font-size:8px;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:999px;white-space:nowrap;display:inline-block;}
+.badge.long{background:rgba(21,128,61,.14);color:var(--green);}
+.badge.short{background:rgba(185,28,28,.14);color:var(--red);}
+.badge.flat{background:rgba(95,114,119,.14);color:var(--muted);}
+input[type=text], input[type=number]{font-family:var(--mono);font-size:11px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 12px;}
+input[type=text]:focus, input[type=number]:focus{outline:none;border-color:var(--accent);}
+button.primary{font-family:var(--head);font-size:10.5px;letter-spacing:.5px;color:#0b1620;background:var(--accent);border:none;padding:10px 18px;border-radius:6px;cursor:pointer;white-space:nowrap;}
+button.primary:hover{filter:brightness(1.1);}
+button.primary:disabled{opacity:.5;cursor:default;}
+.chip-toggle{font-size:10px;color:var(--text);background:var(--chip-bg);border:1px solid var(--border);padding:7px 12px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.chip-toggle input{cursor:pointer;}
+.loading,.error{font-family:var(--mono);font-size:11px;color:var(--muted);padding:20px 0;text-align:center;}
+.error{color:var(--red);}
+.footer-note{font-size:9.5px;color:var(--muted);margin-top:36px;padding-top:16px;border-top:1px solid var(--border);line-height:1.7;}
+.footer-note a{color:var(--accent);}
+@media (max-width:640px){.stat-row{gap:14px;}}
+
+.wrap{max-width:1100px;}
+.add-row{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.add-row input{flex:1;min-width:200px;}
+.wl-row{display:grid;grid-template-columns:120px repeat(3,1fr) 70px;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 15px;margin-bottom:8px;}
+.wl-row .sym{font-family:var(--head);font-size:12px;color:var(--bright);}
+.wl-sig{font-size:10px;}
+.wl-sig .label{font-size:7.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px;}
+.wl-sig .val{font-weight:600;}
+.wl-sig .val.pos{color:var(--green);} .wl-sig .val.neg{color:var(--red);} .wl-sig .val.flat{color:var(--muted);}
+.removeBtn{font-size:9px;color:var(--muted);background:none;border:1px solid var(--border);border-radius:6px;padding:7px 10px;cursor:pointer;justify-self:end;}
+.removeBtn:hover{border-color:var(--red);color:var(--red);}
+.empty-state{font-size:11px;color:var(--muted);padding:30px 0;text-align:center;}
+@media (max-width:760px){.wl-row{grid-template-columns:1fr;text-align:left;}.removeBtn{justify-self:start;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav">
+    <a class="brand" href="index.html"><img src="icon-192.png" alt=""><span class="brand-name">GENITUS Master-Terminal</span></a>
+    <div class="topnav-actions">
+      <a href="index.html">🏠 Hub</a>
+      <a href="guide.html">🧭 Guide</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" id="toolsDropdownBtn" type="button" style="border-color:var(--accent);color:var(--accent);">🛠️ Cross-Cluster-Tools ▾</button>
+        <div class="nav-dropdown-menu" id="toolsDropdownMenu">
+          <a href="ticker-lookup.html">🔍 Ticker-Lookup</a>
+          <a href="leaderboard.html">🏆 Leaderboard</a>
+          <a href="combo-sandbox.html">🧪 Combo-Sandbox</a>
+          <a href="watchlist.html" class="active">⭐ Watchlist</a>
+          <a href="digest.html">📰 Wochen-Digest</a>
+          <a href="status.html">🩺 Status</a>
+        </div>
+      </div>
+      <a href="docs.html">📚 Docs</a>
+      <a href="methodology.html">⚖️ Methodik</a>
+      <button id="themeToggle" type="button">🌙 Dark Mode</button>
+    </div>
+  </div>
+  <h1>⭐ Watchlist</h1>
+  <div class="subtitle">Nur lokal im Browser gespeichert -- kein Server, kein Account, übersteht einen Reload aber nicht Browser/Gerät-Wechsel</div>
+
+  <div class="callout">
+  Jedes gespeicherte Symbol wird beim Laden dieser Seite live über den EOD-Proxy neu berechnet (Kanal-Breakout,
+  RSI, Midpoint-Konfluenz) -- dieselbe Engine wie im <a href="ticker-lookup.html">Ticker-Lookup</a>. Für
+  "was hat sich seit letzter Woche geändert" siehe den <a href="digest.html">Wochen-Digest</a>.
+  </div>
+
+  <div class="add-row">
+    <input type="text" id="addInput" placeholder="Symbol hinzufügen, z.B. SAP.XETRA…">
+    <button class="primary" id="addBtn">+ Hinzufügen</button>
+  </div>
+
+  <div id="listBox"></div>
+  <div id="emptyState" class="empty-state" style="display:none;">Noch keine Symbole gespeichert. Füge oben eines hinzu.</div>
+
+  <div class="footer-note">
+  AI-generierte, computationale Analyse -- keine Anlageberatung. localStorage-Key: <code>genitus-master:watchlist</code>.
+  Zurück zum <a href="index.html">Master-Terminal</a>. © 2026 GENITUS INC.
+  </div>
+</div>
+<script>
+
+const THEME_KEY = 'genitus-master:theme';
+const themeBtn = document.getElementById('themeToggle');
+function applyTheme(dark) {
+  document.documentElement.classList.toggle('dark', dark);
+  themeBtn.textContent = dark ? '☀️ Light Mode' : '🌙 Dark Mode';
+  const meta = document.getElementById('themeColorMeta');
+  if (meta) meta.setAttribute('content', dark ? '#070f13' : '#f4f7fb');
+}
+applyTheme(localStorage.getItem(THEME_KEY) === 'dark');
+themeBtn.addEventListener('click', () => {
+  const dark = !document.documentElement.classList.contains('dark');
+  applyTheme(dark);
+  try { localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); } catch (e) {}
+});
+const toolsBtn = document.getElementById('toolsDropdownBtn');
+const toolsMenu = document.getElementById('toolsDropdownMenu');
+if (toolsBtn && toolsMenu) {
+  toolsBtn.addEventListener('click', (e) => { e.stopPropagation(); toolsMenu.classList.toggle('open'); });
+  document.addEventListener('click', () => toolsMenu.classList.remove('open'));
+}
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+
+
+const PROXY = 'https://theserver-open-ai.replit.app';
+
+async function fetchHistorical(symbol, daysBack) {
+  daysBack = daysBack || 420;
+  const from = new Date(Date.now() - daysBack * 86400000).toISOString().slice(0, 10);
+  const res = await fetch(PROXY + '/eod/historical/' + encodeURIComponent(symbol) + '?from=' + from, { signal: AbortSignal.timeout(20000) });
+  if (!res.ok) throw new Error('HTTP ' + res.status + ' für ' + symbol);
+  const rows = await res.json();
+  if (!Array.isArray(rows) || rows.length === 0) throw new Error('Keine Daten für ' + symbol);
+  return rows.map(r => ({ date: r.date, close: Number(r.close) }))
+    .filter(r => Number.isFinite(r.close) && r.date)
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+function computeRSI(series, period) {
+  period = period || 14;
+  if (series.length < period + 1) return null;
+  let gains = 0, losses = 0;
+  for (let i = 1; i <= period; i++) {
+    const d = series[i].close - series[i - 1].close;
+    if (d >= 0) gains += d; else losses -= d;
+  }
+  let avgGain = gains / period, avgLoss = losses / period;
+  for (let i = period + 1; i < series.length; i++) {
+    const d = series[i].close - series[i - 1].close;
+    const g = d > 0 ? d : 0, l = d < 0 ? -d : 0;
+    avgGain = (avgGain * (period - 1) + g) / period;
+    avgLoss = (avgLoss * (period - 1) + l) / period;
+  }
+  if (avgLoss === 0) return 100;
+  const rs = avgGain / avgLoss;
+  return 100 - (100 / (1 + rs));
+}
+
+function computeChannelSignal(series) {
+  const fridays = series.filter(r => new Date(r.date + 'T00:00:00Z').getUTCDay() === 5);
+  if (fridays.length < 3) return null;
+  const last3 = fridays.slice(-3).map(r => r.close);
+  const hi = Math.max(...last3), lo = Math.min(...last3);
+  const last = series[series.length - 1].close;
+  let signal = 'FLAT';
+  if (last > hi) signal = 'LONG';
+  else if (last < lo) signal = 'SHORT';
+  return { signal: signal, channelHigh: hi, channelLow: lo, last: last };
+}
+
+function computeMidpointConfluence(series) {
+  const windows = { '1M': 21, '3M': 63, '6M': 126, '1Y': 252 };
+  let score = 0;
+  const detail = {};
+  for (const label of Object.keys(windows)) {
+    const n = windows[label];
+    if (series.length < n + 1) { detail[label] = null; continue; }
+    const win = series.slice(-n);
+    const closes = win.map(r => r.close);
+    const hi = Math.max(...closes), lo = Math.min(...closes);
+    const mid = (hi + lo) / 2;
+    const last = series[series.length - 1].close;
+    const sig = last > mid ? 1 : (last < mid ? -1 : 0);
+    score += sig;
+    detail[label] = sig;
+  }
+  return { score: score, detail: detail };
+}
+
+function rsiSignal(rsi) {
+  if (rsi === null) return 'N/A';
+  if (rsi < 30) return 'LONG (überverkauft)';
+  if (rsi > 70) return 'SHORT (überkauft)';
+  return 'neutral';
+}
+
+function confluenceLabel(score) {
+  if (score === null) return 'N/A';
+  if (score <= -3) return 'Stark bearish (Contrarian-Zone)';
+  if (score < 0) return 'Leicht bearish';
+  if (score === 0) return 'Neutral';
+  if (score < 3) return 'Leicht bullish';
+  return 'Stark bullish (Momentum-Zone)';
+}
+
+
+const WL_KEY = 'genitus-master:watchlist';
+function getWatchlist() { try { return JSON.parse(localStorage.getItem(WL_KEY) || '[]'); } catch (e) { return []; } }
+function saveWatchlist(list) { try { localStorage.setItem(WL_KEY, JSON.stringify(list)); } catch (e) {} }
+
+function rowSkeleton(symbol) {
+  return '<div class="wl-row" data-symbol="' + symbol + '">' +
+    '<div class="sym">' + symbol + '</div>' +
+    '<div class="wl-sig"><span class="label">Kanal</span><span class="val flat">lädt…</span></div>' +
+    '<div class="wl-sig"><span class="label">RSI(14)</span><span class="val flat">lädt…</span></div>' +
+    '<div class="wl-sig"><span class="label">Konfluenz</span><span class="val flat">lädt…</span></div>' +
+    '<button class="removeBtn" data-remove="' + symbol + '">Entfernen</button>' +
+  '</div>';
+}
+
+async function loadRow(symbol) {
+  const row = document.querySelector('.wl-row[data-symbol="' + CSS.escape(symbol) + '"]');
+  if (!row) return;
+  const sigEls = row.querySelectorAll('.wl-sig .val');
+  try {
+    const series = await fetchHistorical(symbol, 420);
+    const channel = computeChannelSignal(series);
+    const rsi = computeRSI(series, 14);
+    const confluence = computeMidpointConfluence(series);
+
+    sigEls[0].textContent = channel ? channel.signal : 'N/A';
+    sigEls[0].className = 'val ' + (channel && channel.signal === 'LONG' ? 'pos' : channel && channel.signal === 'SHORT' ? 'neg' : 'flat');
+
+    sigEls[1].textContent = rsi !== null ? rsi.toFixed(1) : 'N/A';
+    sigEls[1].className = 'val ' + (rsi !== null && rsi < 30 ? 'pos' : rsi !== null && rsi > 70 ? 'neg' : 'flat');
+
+    sigEls[2].textContent = (confluence.score > 0 ? '+' : '') + confluence.score;
+    sigEls[2].className = 'val ' + (confluence.score <= -2 ? 'pos' : confluence.score >= 2 ? 'neg' : 'flat');
+  } catch (e) {
+    sigEls.forEach(el => { el.textContent = 'Fehler'; el.className = 'val neg'; });
+  }
+}
+
+function render() {
+  const list = getWatchlist();
+  const listBox = document.getElementById('listBox');
+  const emptyState = document.getElementById('emptyState');
+  if (list.length === 0) {
+    listBox.innerHTML = '';
+    emptyState.style.display = 'block';
+    return;
+  }
+  emptyState.style.display = 'none';
+  listBox.innerHTML = list.map(rowSkeleton).join('');
+  document.querySelectorAll('[data-remove]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const updated = getWatchlist().filter(s => s !== btn.dataset.remove);
+      saveWatchlist(updated);
+      render();
+    });
+  });
+  list.forEach(loadRow);
+}
+
+document.getElementById('addBtn').addEventListener('click', () => {
+  const input = document.getElementById('addInput');
+  const symbol = input.value.trim();
+  if (!symbol) return;
+  const list = getWatchlist();
+  if (!list.includes(symbol)) { list.push(symbol); saveWatchlist(list); render(); }
+  input.value = '';
+});
+document.getElementById('addInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('addBtn').click(); });
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENITUS Master-Terminal — Ticker-Lookup (360°)</title>
+<meta name="description" content="Ein Symbol eingeben, drei Live-Preissignale (Kanal-Breakout, RSI, Midpoint-Konfluenz) gleichzeitig sehen -- clusterübergreifend, live berechnet.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<meta name="theme-color" id="themeColorMeta" content="#f4f7fb">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#f4f7fb;--surface:#ffffff;--panel:#eaf1f5;--border:#d6e2ea;--accent:#b45309;--green:#15803d;--red:#b91c1c;--muted:#5f7277;--text:#1c2e34;--bright:#0b1620;--chip-bg:rgba(11,22,32,.045);--mono:'JetBrains Mono',monospace;--head:'Orbitron',sans-serif;}
+:root.dark{--bg:#070f13;--surface:#0d171a;--panel:#111e23;--border:#1e2d3d;--accent:#f0c040;--green:#22c55e;--red:#f87171;--muted:#7d97a0;--text:#dceef3;--bright:#f4f7fb;--chip-bg:rgba(255,255,255,.05);}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);line-height:1.6;transition:background .15s,color .15s;}
+.wrap{max-width:1020px;margin:0 auto;padding:22px 22px 70px;}
+.wrap.wide{max-width:1320px;}
+.topnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+.brand img{width:36px;height:36px;border-radius:9px;}
+.brand .brand-name{font-family:var(--head);font-size:14px;color:var(--bright);letter-spacing:.3px;}
+.topnav-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;position:relative;}
+.topnav-actions a, .topnav-actions button{font-family:var(--mono);font-size:9.5px;color:var(--text);background:var(--panel);padding:7px 11px;border-radius:6px;text-decoration:none;border:1px solid var(--border);cursor:pointer;white-space:nowrap;}
+.topnav-actions a:hover, .topnav-actions button:hover{border-color:var(--accent);color:var(--accent);}
+.topnav-actions a.active{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb, var(--accent) 10%, transparent);}
+.nav-dropdown{position:relative;}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:190px;box-shadow:0 10px 28px -8px rgba(0,0,0,.25);z-index:50;flex-direction:column;gap:2px;}
+.nav-dropdown-menu.open{display:flex;}
+.nav-dropdown-menu a{background:none;border:none;text-align:left;padding:8px 10px;border-radius:5px;}
+.nav-dropdown-menu a:hover{background:var(--panel);}
+h1{font-family:var(--head);font-size:19px;color:var(--bright);margin-bottom:4px;}
+.subtitle{font-size:10.5px;color:var(--muted);margin-bottom:18px;}
+.backlink{font-size:10.5px;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:10px;}
+.backlink:hover{color:var(--accent);}
+.callout{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:6px;padding:14px 16px;font-size:11px;line-height:1.75;margin-bottom:20px;}
+.callout b{color:var(--bright);}
+.callout.warn{border-left-color:var(--red);}
+h2{font-family:var(--head);font-size:13.5px;letter-spacing:1px;color:var(--accent);margin:30px 0 12px;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:8px;}
+p.lead{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:14px;}
+.stat-row{display:flex;gap:22px;flex-wrap:wrap;margin:14px 0 22px;}
+.stat b{font-family:var(--head);font-size:18px;color:var(--bright);display:block;}
+.stat span{font-size:7.5px;color:var(--muted);letter-spacing:1px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;}
+.card b{color:var(--bright);font-family:var(--head);font-size:11px;}
+.card p{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.7;}
+.table-scroll{overflow-x:auto;margin-bottom:14px;}
+table{width:100%;min-width:600px;border-collapse:collapse;font-size:10.5px;}
+th{text-align:left;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);font-size:8.5px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;}
+td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+td a{color:var(--accent);text-decoration:none;}
+td a:hover{text-decoration:underline;}
+.pos{color:var(--green);} .neg{color:var(--red);}
+.badge{font-size:8px;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:999px;white-space:nowrap;display:inline-block;}
+.badge.long{background:rgba(21,128,61,.14);color:var(--green);}
+.badge.short{background:rgba(185,28,28,.14);color:var(--red);}
+.badge.flat{background:rgba(95,114,119,.14);color:var(--muted);}
+input[type=text], input[type=number]{font-family:var(--mono);font-size:11px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 12px;}
+input[type=text]:focus, input[type=number]:focus{outline:none;border-color:var(--accent);}
+button.primary{font-family:var(--head);font-size:10.5px;letter-spacing:.5px;color:#0b1620;background:var(--accent);border:none;padding:10px 18px;border-radius:6px;cursor:pointer;white-space:nowrap;}
+button.primary:hover{filter:brightness(1.1);}
+button.primary:disabled{opacity:.5;cursor:default;}
+.chip-toggle{font-size:10px;color:var(--text);background:var(--chip-bg);border:1px solid var(--border);padding:7px 12px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.chip-toggle input{cursor:pointer;}
+.loading,.error{font-family:var(--mono);font-size:11px;color:var(--muted);padding:20px 0;text-align:center;}
+.error{color:var(--red);}
+.footer-note{font-size:9.5px;color:var(--muted);margin-top:36px;padding-top:16px;border-top:1px solid var(--border);line-height:1.7;}
+.footer-note a{color:var(--accent);}
+@media (max-width:640px){.stat-row{gap:14px;}}
+
+.search-row{display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+.search-row input{flex:1;min-width:200px;}
+.examples{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.examples button{font-size:9.5px;color:var(--muted);background:var(--chip-bg);border:1px solid var(--border);padding:5px 10px;border-radius:999px;cursor:pointer;}
+.examples button:hover{border-color:var(--accent);color:var(--accent);}
+.signal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0;}
+.signal-card{background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--card-color, var(--accent));border-radius:10px;padding:16px;}
+.signal-card h3{font-family:var(--head);font-size:12px;color:var(--bright);margin-bottom:10px;}
+.signal-card .big{font-family:var(--head);font-size:17px;margin-bottom:6px;}
+.signal-card .big.pos{color:var(--green);} .signal-card .big.neg{color:var(--red);} .signal-card .big.flat{color:var(--muted);}
+.signal-card .detail{font-size:9.5px;color:var(--muted);line-height:1.7;}
+.cross-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.cross-links a{font-size:9.5px;color:var(--accent);background:var(--chip-bg);border:1px solid var(--border);padding:7px 12px;border-radius:6px;text-decoration:none;}
+.cross-links a:hover{border-color:var(--accent);}
+@media (max-width:860px){.signal-grid{grid-template-columns:minmax(0,1fr);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav">
+    <a class="brand" href="index.html"><img src="icon-192.png" alt=""><span class="brand-name">GENITUS Master-Terminal</span></a>
+    <div class="topnav-actions">
+      <a href="index.html">🏠 Hub</a>
+      <a href="guide.html">🧭 Guide</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" id="toolsDropdownBtn" type="button" style="border-color:var(--accent);color:var(--accent);">🛠️ Cross-Cluster-Tools ▾</button>
+        <div class="nav-dropdown-menu" id="toolsDropdownMenu">
+          <a href="ticker-lookup.html" class="active">🔍 Ticker-Lookup</a>
+          <a href="leaderboard.html">🏆 Leaderboard</a>
+          <a href="combo-sandbox.html">🧪 Combo-Sandbox</a>
+          <a href="watchlist.html">⭐ Watchlist</a>
+          <a href="digest.html">📰 Wochen-Digest</a>
+          <a href="status.html">🩺 Status</a>
+        </div>
+      </div>
+      <a href="docs.html">📚 Docs</a>
+      <a href="methodology.html">⚖️ Methodik</a>
+      <button id="themeToggle" type="button">🌙 Dark Mode</button>
+    </div>
+  </div>
+  <h1>🔍 Ticker-Lookup (360°-Analyse)</h1>
+  <div class="subtitle">Ein Symbol, drei live berechnete Preissignale aus verschiedenen GENITUS-Methodiken -- gleichzeitig</div>
+
+  <div class="callout">
+  <b>Was das kann und was nicht:</b> alle drei Signale hier basieren ausschließlich auf <b>Kursdaten</b> (live
+  über den EOD-Proxy), nicht auf Fundamentaldaten. Health-Score, Dividendenrendite, Composite-Score und
+  ähnliche fundamental-basierte Kennzahlen stammen aus eigenen, vorab aufgebauten Datensätzen einzelner
+  Cluster und lassen sich hier NICHT generisch live für jeden beliebigen Ticker nachbilden -- dafür verlinken
+  die Buttons unten direkt zum passenden Cluster.
+  </div>
+
+  <div class="search-row">
+    <input type="text" id="symbolInput" placeholder="Symbol eingeben, z.B. SAP.XETRA, AAPL.US, BTC-USD.CC…">
+    <button class="primary" id="lookupBtn">Analysieren</button>
+  </div>
+  <div class="examples">
+    <button data-sym="SAP.XETRA">SAP.XETRA</button>
+    <button data-sym="SIE.XETRA">SIE.XETRA</button>
+    <button data-sym="AAPL.US">AAPL.US</button>
+    <button data-sym="MSFT.US">MSFT.US</button>
+    <button data-sym="BTC-USD.CC">BTC-USD.CC</button>
+  </div>
+
+  <div id="statusMsg" class="loading" style="display:none;"></div>
+
+  <div id="results" style="display:none;">
+    <div class="signal-grid">
+      <div class="signal-card" style="--card-color:#0891b2;">
+        <h3>📡 Kanal-Breakout</h3>
+        <div class="big" id="channelBig">—</div>
+        <div class="detail" id="channelDetail"></div>
+      </div>
+      <div class="signal-card" style="--card-color:#7c3aed;">
+        <h3>↩️ RSI(14)</h3>
+        <div class="big" id="rsiBig">—</div>
+        <div class="detail" id="rsiDetail"></div>
+      </div>
+      <div class="signal-card" style="--card-color:#be185d;">
+        <h3>🎯 Midpoint-Konfluenz</h3>
+        <div class="big" id="confluenceBig">—</div>
+        <div class="detail" id="confluenceDetail"></div>
+      </div>
+    </div>
+
+    <h2>Für Fundamentaldaten zu diesem Symbol</h2>
+    <p class="lead">Diese Cluster haben eigene, vorab aufgebaute Fundamentaldaten -- Symbol dort manuell
+    nachschlagen (die Datensätze unterscheiden sich im Universum: nicht jedes Symbol ist in jedem Cluster
+    enthalten):</p>
+    <div class="cross-links">
+      <a href="https://babybounce500.github.io/genitus-workshell/" target="_blank" rel="noopener noreferrer">💰 Dividend-Terminal</a>
+      <a href="https://babybounce500.github.io/genitus-bilanz-screener/" target="_blank" rel="noopener noreferrer">🏛️ Bilanz-Screener</a>
+      <a href="https://babybounce500.github.io/genitus-midpoint-terminal/composite-score.html" target="_blank" rel="noopener noreferrer">📊 Composite-Score</a>
+      <a href="watchlist.html">⭐ Zur Watchlist hinzufügen</a>
+    </div>
+  </div>
+
+  <div class="footer-note">
+  AI-generierte, computationale Analyse -- keine Anlageberatung. Methodik identisch zu den validierten
+  GoldShield- und Midpoint-Terminal-Signalen (siehe <a href="docs.html">Docs</a>), hier nur live für ein
+  beliebiges Symbol statt für vordefinierte Körbe berechnet. Zurück zum <a href="index.html">Master-Terminal</a>.
+  © 2026 GENITUS INC.
+  </div>
+</div>
+<script>
+
+const THEME_KEY = 'genitus-master:theme';
+const themeBtn = document.getElementById('themeToggle');
+function applyTheme(dark) {
+  document.documentElement.classList.toggle('dark', dark);
+  themeBtn.textContent = dark ? '☀️ Light Mode' : '🌙 Dark Mode';
+  const meta = document.getElementById('themeColorMeta');
+  if (meta) meta.setAttribute('content', dark ? '#070f13' : '#f4f7fb');
+}
+applyTheme(localStorage.getItem(THEME_KEY) === 'dark');
+themeBtn.addEventListener('click', () => {
+  const dark = !document.documentElement.classList.contains('dark');
+  applyTheme(dark);
+  try { localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); } catch (e) {}
+});
+const toolsBtn = document.getElementById('toolsDropdownBtn');
+const toolsMenu = document.getElementById('toolsDropdownMenu');
+if (toolsBtn && toolsMenu) {
+  toolsBtn.addEventListener('click', (e) => { e.stopPropagation(); toolsMenu.classList.toggle('open'); });
+  document.addEventListener('click', () => toolsMenu.classList.remove('open'));
+}
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+
+
+const PROXY = 'https://theserver-open-ai.replit.app';
+
+async function fetchHistorical(symbol, daysBack) {
+  daysBack = daysBack || 420;
+  const from = new Date(Date.now() - daysBack * 86400000).toISOString().slice(0, 10);
+  const res = await fetch(PROXY + '/eod/historical/' + encodeURIComponent(symbol) + '?from=' + from, { signal: AbortSignal.timeout(20000) });
+  if (!res.ok) throw new Error('HTTP ' + res.status + ' für ' + symbol);
+  const rows = await res.json();
+  if (!Array.isArray(rows) || rows.length === 0) throw new Error('Keine Daten für ' + symbol);
+  return rows.map(r => ({ date: r.date, close: Number(r.close) }))
+    .filter(r => Number.isFinite(r.close) && r.date)
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+function computeRSI(series, period) {
+  period = period || 14;
+  if (series.length < period + 1) return null;
+  let gains = 0, losses = 0;
+  for (let i = 1; i <= period; i++) {
+    const d = series[i].close - series[i - 1].close;
+    if (d >= 0) gains += d; else losses -= d;
+  }
+  let avgGain = gains / period, avgLoss = losses / period;
+  for (let i = period + 1; i < series.length; i++) {
+    const d = series[i].close - series[i - 1].close;
+    const g = d > 0 ? d : 0, l = d < 0 ? -d : 0;
+    avgGain = (avgGain * (period - 1) + g) / period;
+    avgLoss = (avgLoss * (period - 1) + l) / period;
+  }
+  if (avgLoss === 0) return 100;
+  const rs = avgGain / avgLoss;
+  return 100 - (100 / (1 + rs));
+}
+
+function computeChannelSignal(series) {
+  const fridays = series.filter(r => new Date(r.date + 'T00:00:00Z').getUTCDay() === 5);
+  if (fridays.length < 3) return null;
+  const last3 = fridays.slice(-3).map(r => r.close);
+  const hi = Math.max(...last3), lo = Math.min(...last3);
+  const last = series[series.length - 1].close;
+  let signal = 'FLAT';
+  if (last > hi) signal = 'LONG';
+  else if (last < lo) signal = 'SHORT';
+  return { signal: signal, channelHigh: hi, channelLow: lo, last: last };
+}
+
+function computeMidpointConfluence(series) {
+  const windows = { '1M': 21, '3M': 63, '6M': 126, '1Y': 252 };
+  let score = 0;
+  const detail = {};
+  for (const label of Object.keys(windows)) {
+    const n = windows[label];
+    if (series.length < n + 1) { detail[label] = null; continue; }
+    const win = series.slice(-n);
+    const closes = win.map(r => r.close);
+    const hi = Math.max(...closes), lo = Math.min(...closes);
+    const mid = (hi + lo) / 2;
+    const last = series[series.length - 1].close;
+    const sig = last > mid ? 1 : (last < mid ? -1 : 0);
+    score += sig;
+    detail[label] = sig;
+  }
+  return { score: score, detail: detail };
+}
+
+function rsiSignal(rsi) {
+  if (rsi === null) return 'N/A';
+  if (rsi < 30) return 'LONG (überverkauft)';
+  if (rsi > 70) return 'SHORT (überkauft)';
+  return 'neutral';
+}
+
+function confluenceLabel(score) {
+  if (score === null) return 'N/A';
+  if (score <= -3) return 'Stark bearish (Contrarian-Zone)';
+  if (score < 0) return 'Leicht bearish';
+  if (score === 0) return 'Neutral';
+  if (score < 3) return 'Leicht bullish';
+  return 'Stark bullish (Momentum-Zone)';
+}
+
+
+const symbolInput = document.getElementById('symbolInput');
+const lookupBtn = document.getElementById('lookupBtn');
+const statusMsg = document.getElementById('statusMsg');
+const results = document.getElementById('results');
+
+document.querySelectorAll('.examples button').forEach(b => {
+  b.addEventListener('click', () => { symbolInput.value = b.dataset.sym; runLookup(); });
+});
+lookupBtn.addEventListener('click', runLookup);
+symbolInput.addEventListener('keydown', e => { if (e.key === 'Enter') runLookup(); });
+
+function fmtPct(v) { return (v >= 0 ? '+' : '') + v.toFixed(2) + '%'; }
+
+async function runLookup() {
+  const symbol = symbolInput.value.trim();
+  if (!symbol) return;
+  lookupBtn.disabled = true;
+  results.style.display = 'none';
+  statusMsg.style.display = 'block';
+  statusMsg.className = 'loading';
+  statusMsg.textContent = 'Lade Kursdaten für ' + symbol + '…';
+  try {
+    const series = await fetchHistorical(symbol, 420);
+    if (series.length < 30) throw new Error('Zu wenig Kurshistorie für eine verlässliche Analyse (' + series.length + ' Tage).');
+
+    const channel = computeChannelSignal(series);
+    const rsi = computeRSI(series, 14);
+    const confluence = computeMidpointConfluence(series);
+    const last = series[series.length - 1];
+
+    const channelBig = document.getElementById('channelBig');
+    const channelDetail = document.getElementById('channelDetail');
+    if (channel) {
+      channelBig.textContent = channel.signal;
+      channelBig.className = 'big ' + (channel.signal === 'LONG' ? 'pos' : channel.signal === 'SHORT' ? 'neg' : 'flat');
+      channelDetail.innerHTML = 'Kanal (3 Freitage): ' + channel.channelLow.toFixed(2) + ' – ' + channel.channelHigh.toFixed(2) + '<br>Letzter Kurs: ' + channel.last.toFixed(2) + ' (' + last.date + ')';
+    } else {
+      channelBig.textContent = 'N/A'; channelBig.className = 'big flat';
+      channelDetail.textContent = 'Zu wenig Freitags-Historie für den 3-Wochen-Kanal.';
+    }
+
+    const rsiBig = document.getElementById('rsiBig');
+    const rsiDetail = document.getElementById('rsiDetail');
+    if (rsi !== null) {
+      const sig = rsiSignal(rsi);
+      rsiBig.textContent = rsi.toFixed(1);
+      rsiBig.className = 'big ' + (rsi < 30 ? 'pos' : rsi > 70 ? 'neg' : 'flat');
+      rsiDetail.textContent = sig + ' · <30 überverkauft, >70 überkauft';
+    } else {
+      rsiBig.textContent = 'N/A'; rsiBig.className = 'big flat';
+      rsiDetail.textContent = 'Zu wenig Historie für RSI(14).';
+    }
+
+    const confBig = document.getElementById('confluenceBig');
+    const confDetail = document.getElementById('confluenceDetail');
+    confBig.textContent = (confluence.score > 0 ? '+' : '') + confluence.score;
+    confBig.className = 'big ' + (confluence.score < 0 ? 'pos' : confluence.score > 0 ? 'neg' : 'flat');
+    const detailParts = Object.entries(confluence.detail).map(([label, sig]) => label + ': ' + (sig === null ? 'n/a' : sig > 0 ? 'bullish' : sig < 0 ? 'bearish' : 'neutral'));
+    confDetail.innerHTML = confluenceLabel(confluence.score) + '<br>' + detailParts.join(' · ');
+
+    statusMsg.style.display = 'none';
+    results.style.display = 'block';
+  } catch (e) {
+    statusMsg.className = 'error';
+    statusMsg.textContent = 'Fehler: ' + e.message;
+  } finally {
+    lookupBtn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>

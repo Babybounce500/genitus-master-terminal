@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENITUS Master-Terminal — Guide</title>
+<meta name="description" content="Orientierung, Kurz-Tutorials und ein 3-Fragen-Router: wo fange ich im GENITUS-Stack an?">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<meta name="theme-color" id="themeColorMeta" content="#f4f7fb">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#f4f7fb;--surface:#ffffff;--panel:#eaf1f5;--border:#d6e2ea;--accent:#b45309;--green:#15803d;--red:#b91c1c;--muted:#5f7277;--text:#1c2e34;--bright:#0b1620;--chip-bg:rgba(11,22,32,.045);--mono:'JetBrains Mono',monospace;--head:'Orbitron',sans-serif;}
+:root.dark{--bg:#070f13;--surface:#0d171a;--panel:#111e23;--border:#1e2d3d;--accent:#f0c040;--green:#22c55e;--red:#f87171;--muted:#7d97a0;--text:#dceef3;--bright:#f4f7fb;--chip-bg:rgba(255,255,255,.05);}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);line-height:1.6;transition:background .15s,color .15s;}
+.wrap{max-width:1020px;margin:0 auto;padding:22px 22px 70px;}
+.wrap.wide{max-width:1320px;}
+.topnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+.brand img{width:36px;height:36px;border-radius:9px;}
+.brand .brand-name{font-family:var(--head);font-size:14px;color:var(--bright);letter-spacing:.3px;}
+.topnav-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;position:relative;}
+.topnav-actions a, .topnav-actions button{font-family:var(--mono);font-size:9.5px;color:var(--text);background:var(--panel);padding:7px 11px;border-radius:6px;text-decoration:none;border:1px solid var(--border);cursor:pointer;white-space:nowrap;}
+.topnav-actions a:hover, .topnav-actions button:hover{border-color:var(--accent);color:var(--accent);}
+.topnav-actions a.active{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb, var(--accent) 10%, transparent);}
+.nav-dropdown{position:relative;}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:190px;box-shadow:0 10px 28px -8px rgba(0,0,0,.25);z-index:50;flex-direction:column;gap:2px;}
+.nav-dropdown-menu.open{display:flex;}
+.nav-dropdown-menu a{background:none;border:none;text-align:left;padding:8px 10px;border-radius:5px;}
+.nav-dropdown-menu a:hover{background:var(--panel);}
+h1{font-family:var(--head);font-size:19px;color:var(--bright);margin-bottom:4px;}
+.subtitle{font-size:10.5px;color:var(--muted);margin-bottom:18px;}
+.backlink{font-size:10.5px;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:10px;}
+.backlink:hover{color:var(--accent);}
+.callout{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:6px;padding:14px 16px;font-size:11px;line-height:1.75;margin-bottom:20px;}
+.callout b{color:var(--bright);}
+.callout.warn{border-left-color:var(--red);}
+h2{font-family:var(--head);font-size:13.5px;letter-spacing:1px;color:var(--accent);margin:30px 0 12px;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:8px;}
+p.lead{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:14px;}
+.stat-row{display:flex;gap:22px;flex-wrap:wrap;margin:14px 0 22px;}
+.stat b{font-family:var(--head);font-size:18px;color:var(--bright);display:block;}
+.stat span{font-size:7.5px;color:var(--muted);letter-spacing:1px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;}
+.card b{color:var(--bright);font-family:var(--head);font-size:11px;}
+.card p{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.7;}
+.table-scroll{overflow-x:auto;margin-bottom:14px;}
+table{width:100%;min-width:600px;border-collapse:collapse;font-size:10.5px;}
+th{text-align:left;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);font-size:8.5px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;}
+td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+td a{color:var(--accent);text-decoration:none;}
+td a:hover{text-decoration:underline;}
+.pos{color:var(--green);} .neg{color:var(--red);}
+.badge{font-size:8px;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:999px;white-space:nowrap;display:inline-block;}
+.badge.long{background:rgba(21,128,61,.14);color:var(--green);}
+.badge.short{background:rgba(185,28,28,.14);color:var(--red);}
+.badge.flat{background:rgba(95,114,119,.14);color:var(--muted);}
+input[type=text], input[type=number]{font-family:var(--mono);font-size:11px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 12px;}
+input[type=text]:focus, input[type=number]:focus{outline:none;border-color:var(--accent);}
+button.primary{font-family:var(--head);font-size:10.5px;letter-spacing:.5px;color:#0b1620;background:var(--accent);border:none;padding:10px 18px;border-radius:6px;cursor:pointer;white-space:nowrap;}
+button.primary:hover{filter:brightness(1.1);}
+button.primary:disabled{opacity:.5;cursor:default;}
+.chip-toggle{font-size:10px;color:var(--text);background:var(--chip-bg);border:1px solid var(--border);padding:7px 12px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.chip-toggle input{cursor:pointer;}
+.loading,.error{font-family:var(--mono);font-size:11px;color:var(--muted);padding:20px 0;text-align:center;}
+.error{color:var(--red);}
+.footer-note{font-size:9.5px;color:var(--muted);margin-top:36px;padding-top:16px;border-top:1px solid var(--border);line-height:1.7;}
+.footer-note a{color:var(--accent);}
+@media (max-width:640px){.stat-row{gap:14px;}}
+
+.quiz-step{display:none;}
+.quiz-step.active{display:block;}
+.quiz-opt{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:13px 16px;margin-bottom:9px;cursor:pointer;color:var(--text);font-family:var(--mono);font-size:11px;}
+.quiz-opt:hover{border-color:var(--accent);}
+.quiz-opt b{display:block;font-family:var(--head);font-size:11.5px;color:var(--bright);margin-bottom:3px;}
+.quiz-opt span{font-size:9.5px;color:var(--muted);}
+.quiz-result{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:8px;padding:16px 18px;}
+.quiz-result h3{font-family:var(--head);font-size:13px;color:var(--bright);margin-bottom:8px;}
+.quiz-result a.goto{display:inline-block;margin-top:10px;font-family:var(--head);font-size:10.5px;color:#0b1620;background:var(--accent);padding:10px 18px;border-radius:6px;text-decoration:none;}
+.quiz-restart{font-size:9.5px;color:var(--muted);background:none;border:none;text-decoration:underline;cursor:pointer;margin-top:10px;display:block;}
+.tut-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.tut{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
+.tut b{font-family:var(--head);font-size:11px;color:var(--bright);display:block;margin-bottom:6px;}
+.tut ol{font-size:10px;color:var(--muted);line-height:1.9;padding-left:16px;}
+.tut a{color:var(--accent);text-decoration:none;font-size:9.5px;display:inline-block;margin-top:6px;}
+.tut a:hover{text-decoration:underline;}
+@media (max-width:640px){.tut-grid{grid-template-columns:minmax(0,1fr);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav">
+    <a class="brand" href="index.html"><img src="icon-192.png" alt=""><span class="brand-name">GENITUS Master-Terminal</span></a>
+    <div class="topnav-actions">
+      <a href="index.html">🏠 Hub</a>
+      <a href="guide.html" class="active">🧭 Guide</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" id="toolsDropdownBtn" type="button">🛠️ Cross-Cluster-Tools ▾</button>
+        <div class="nav-dropdown-menu" id="toolsDropdownMenu">
+          <a href="ticker-lookup.html">🔍 Ticker-Lookup</a>
+          <a href="leaderboard.html">🏆 Leaderboard</a>
+          <a href="combo-sandbox.html">🧪 Combo-Sandbox</a>
+          <a href="watchlist.html">⭐ Watchlist</a>
+          <a href="digest.html">📰 Wochen-Digest</a>
+          <a href="status.html">🩺 Status</a>
+        </div>
+      </div>
+      <a href="docs.html">📚 Docs</a>
+      <a href="methodology.html">⚖️ Methodik</a>
+      <button id="themeToggle" type="button">🌙 Dark Mode</button>
+    </div>
+  </div>
+  <h1>🧭 Guide: Orientierung &amp; Erste Schritte</h1>
+  <div class="subtitle">Drei Fragen bis zum richtigen Cluster, plus Kurz-Tutorials für die neuen Cross-Cluster-Tools</div>
+
+  <div class="callout">
+  <b>Warum das hier existiert:</b> hinter 14 Kacheln stecken ~150 Einzel-Tools -- ohne Orientierung muss man
+  schon wissen, welcher Cluster das Richtige ist, bevor man überhaupt sucht. Diese Seite löst das in zwei
+  Schritten: ein kurzer Router unten, und darunter Mini-Anleitungen für die Tools, die nicht offensichtlich
+  selbsterklärend sind.
+  </div>
+
+  <h2 id="router">🧭 Wo fange ich an?</h2>
+  <div id="quizBox">
+    <div class="quiz-step active" data-step="0">
+      <p class="lead">Was willst du gerade tun?</p>
+      <button class="quiz-opt" data-next="goal-pitch"><b>Einem Kunden etwas zeigen</b><span>Institutioneller Pitch, Kundengespräch, Vorführung</span></button>
+      <button class="quiz-opt" data-next="goal-trade"><b>Selbst Signale/Strategien nutzen</b><span>Eigene Trades, Backtests, Watchlist</span></button>
+      <button class="quiz-opt" data-next="goal-dividend"><b>Dividendenaktien screenen</b><span>Rendite, Qualität, Wachstum, Risiko einzelner Titel</span></button>
+      <button class="quiz-opt" data-next="goal-explore"><b>Einfach stöbern / Charts ansehen</b><span>Charts, Terminals, oder auch Nicht-Finanz-Daten</span></button>
+    </div>
+
+    <div class="quiz-step" data-step="goal-pitch">
+      <div class="quiz-result"><h3>→ Corporate-Workshell</h3>
+      <p class="lead">Kuratierte 9-Tool-Auswahl speziell für institutionelle Pitches -- Corporate-Terminal,
+      Client-Dossier-Generator, Bilanz-Screener, Markov-Risk-Lab, Backtester. Keine Test/Beta-Tools, keine
+      Ablenkung.</p>
+      <a class="goto" href="https://babybounce500.github.io/genitus-corporate-workshell/" target="_blank" rel="noopener noreferrer">Corporate-Workshell öffnen →</a></div>
+      <button class="quiz-restart" data-restart="1">↺ Neu starten</button>
+    </div>
+
+    <div class="quiz-step" data-step="goal-trade">
+      <div class="quiz-result"><h3>→ GoldShield AI Analysis Archive oder der neue Combo-Sandbox</h3>
+      <p class="lead">Validierte Donchian-Kanal- und RSI-Mean-Reversion-Strategien mit echten Live-Tools,
+      Forschungsprotokoll (38 getestete Hypothesen) und einer konkreten Empfehlung. Willst du mehrere Signale
+      kombiniert sehen, probier den neuen Combo-Sandbox oder den Ticker-Lookup für einen einzelnen Titel.</p>
+      <a class="goto" href="https://babybounce500.github.io/goldshield-ai-analysis-archive/workshell.html" target="_blank" rel="noopener noreferrer">GoldShield-Workshell öffnen →</a>
+      <a class="goto" href="ticker-lookup.html" style="margin-left:8px;background:var(--panel);color:var(--accent);border:1px solid var(--border);">Ticker-Lookup öffnen →</a></div>
+      <button class="quiz-restart" data-restart="1">↺ Neu starten</button>
+    </div>
+
+    <div class="quiz-step" data-step="goal-dividend">
+      <div class="quiz-result"><h3>→ Dividend-Workshell</h3>
+      <p class="lead">32 Tools: Dividend-Terminal, Analysis, Growth-Screener, Aristocrats, Markov-Risk-Lab,
+      Bilanz-Terminal und mehr -- alle über eine Sidebar-Navigation erreichbar.</p>
+      <a class="goto" href="https://babybounce500.github.io/genitus-workshell/" target="_blank" rel="noopener noreferrer">Dividend-Workshell öffnen →</a></div>
+      <button class="quiz-restart" data-restart="1">↺ Neu starten</button>
+    </div>
+
+    <div class="quiz-step" data-step="goal-explore">
+      <div class="quiz-result"><h3>→ Charts-Terminal-Suite oder World-Data</h3>
+      <p class="lead">Für Charts/Trading-Terminals: die Charts-Terminal-Suite (15 Terminals + Galerien + Reports).
+      Für alles außerhalb von Finanzen (Klima, Erdbeben, Wahlen, Sport u.v.m.): World-Data mit 37 Dashboards.</p>
+      <a class="goto" href="https://babybounce500.github.io/genitus-charts-terminal/master-archiv.html" target="_blank" rel="noopener noreferrer">Charts-Terminal-Suite →</a>
+      <a class="goto" href="https://babybounce500.github.io/genitus-world-data/" style="margin-left:8px;" target="_blank" rel="noopener noreferrer">World-Data →</a></div>
+      <button class="quiz-restart" data-restart="1">↺ Neu starten</button>
+    </div>
+  </div>
+
+  <h2 id="tutorials">🎓 Kurz-Tutorials: die neuen Cross-Cluster-Tools</h2>
+  <p class="lead">Diese sechs Tools sind neu und clusterübergreifend -- kein einzelner Cluster für sich kann das,
+  was sie tun. Kurz erklärt, bevor man sie öffnet:</p>
+  <div class="tut-grid">
+    <div class="tut"><b>🔍 Ticker-Lookup</b><ol>
+      <li>Symbol eingeben (z.B. <code>SAP.XETRA</code>, <code>AAPL</code>)</li>
+      <li>Lädt echte Kursdaten live über den EOD-Proxy</li>
+      <li>Zeigt 3 Live-Preissignale gleichzeitig: Kanal-Breakout, RSI, Midpoint-Konfluenz</li>
+      <li>Fundamentaldaten (Dividende, Bilanz) sind NICHT enthalten -- Link zu den passenden Clustern steht dabei</li>
+    </ol><a href="ticker-lookup.html">Öffnen →</a></div>
+    <div class="tut"><b>🏆 Leaderboard</b><ol>
+      <li>Reine Lese-Tabelle, kein Live-Fetch</li>
+      <li>Fasst bereits veröffentlichte, echte Backtest-Zahlen aus GoldShield und Midpoint-Terminal zusammen</li>
+      <li>Jede Zeile verlinkt zur Original-Quelle -- nichts wird hier neu berechnet</li>
+    </ol><a href="leaderboard.html">Öffnen →</a></div>
+    <div class="tut"><b>🧪 Combo-Sandbox</b><ol>
+      <li>Wähle 2-3 Preissignale (Kanal, RSI, Midpoint) per Checkbox</li>
+      <li>Wähle UND (alle müssen übereinstimmen) oder ODER (einer reicht)</li>
+      <li>Läuft live über einen Aktienkorb, zeigt Trefferquote und Trade-Liste</li>
+    </ol><a href="combo-sandbox.html">Öffnen →</a></div>
+    <div class="tut"><b>⭐ Watchlist</b><ol>
+      <li>Symbole hinzufügen -- wird nur lokal im Browser gespeichert (kein Server)</li>
+      <li>Jedes Symbol zeigt automatisch Live-Kanal/RSI/Konfluenz-Signal</li>
+      <li>Übersteht einen Reload, aber NICHT einen anderen Browser/Gerät</li>
+    </ol><a href="watchlist.html">Öffnen →</a></div>
+    <div class="tut"><b>📰 Wochen-Digest</b><ol>
+      <li>Vergleicht den aktuellen Signal-Stand deiner Watchlist mit vor ~5 Handelstagen</li>
+      <li>Zeigt nur, was sich geändert hat (Signal-Flip, RSI-Extrem erreicht)</li>
+      <li>Wird bei jedem Öffnen live neu berechnet -- kein Hintergrund-Job, kein E-Mail-Versand</li>
+    </ol><a href="digest.html">Öffnen →</a></div>
+    <div class="tut"><b>🩺 Status</b><ol>
+      <li>Prüft live, ob alle 14 Cluster-URLs erreichbar sind</li>
+      <li>Prüft zusätzlich den EOD-Proxy, auf dem Ticker-Lookup/Combo-Sandbox/Watchlist/Digest basieren</li>
+      <li>Rein informativ -- repariert nichts automatisch</li>
+    </ol><a href="status.html">Öffnen →</a></div>
+  </div>
+
+  <div class="footer-note">
+  AI-generierte, computationale Analyse -- keine Anlageberatung. Zurück zum <a href="index.html">Master-Terminal</a>.
+  © 2026 GENITUS INC.
+  </div>
+</div>
+<script>
+
+const THEME_KEY = 'genitus-master:theme';
+const themeBtn = document.getElementById('themeToggle');
+function applyTheme(dark) {
+  document.documentElement.classList.toggle('dark', dark);
+  themeBtn.textContent = dark ? '☀️ Light Mode' : '🌙 Dark Mode';
+  const meta = document.getElementById('themeColorMeta');
+  if (meta) meta.setAttribute('content', dark ? '#070f13' : '#f4f7fb');
+}
+applyTheme(localStorage.getItem(THEME_KEY) === 'dark');
+themeBtn.addEventListener('click', () => {
+  const dark = !document.documentElement.classList.contains('dark');
+  applyTheme(dark);
+  try { localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); } catch (e) {}
+});
+const toolsBtn = document.getElementById('toolsDropdownBtn');
+const toolsMenu = document.getElementById('toolsDropdownMenu');
+if (toolsBtn && toolsMenu) {
+  toolsBtn.addEventListener('click', (e) => { e.stopPropagation(); toolsMenu.classList.toggle('open'); });
+  document.addEventListener('click', () => toolsMenu.classList.remove('open'));
+}
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+
+document.querySelectorAll('.quiz-opt').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+    document.querySelector('.quiz-step[data-step="' + btn.dataset.next + '"]').classList.add('active');
+  });
+});
+document.querySelectorAll('[data-restart]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+    document.querySelector('.quiz-step[data-step="0"]').classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

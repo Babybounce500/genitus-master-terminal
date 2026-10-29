@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENITUS Master-Terminal — Status</title>
+<meta name="description" content="Live-Erreichbarkeits-Check aller 14 GENITUS-Cluster und der zentralen APIs, die die Cross-Cluster-Tools antreiben.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<meta name="theme-color" id="themeColorMeta" content="#f4f7fb">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#f4f7fb;--surface:#ffffff;--panel:#eaf1f5;--border:#d6e2ea;--accent:#b45309;--green:#15803d;--red:#b91c1c;--muted:#5f7277;--text:#1c2e34;--bright:#0b1620;--chip-bg:rgba(11,22,32,.045);--mono:'JetBrains Mono',monospace;--head:'Orbitron',sans-serif;}
+:root.dark{--bg:#070f13;--surface:#0d171a;--panel:#111e23;--border:#1e2d3d;--accent:#f0c040;--green:#22c55e;--red:#f87171;--muted:#7d97a0;--text:#dceef3;--bright:#f4f7fb;--chip-bg:rgba(255,255,255,.05);}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);line-height:1.6;transition:background .15s,color .15s;}
+.wrap{max-width:1020px;margin:0 auto;padding:22px 22px 70px;}
+.wrap.wide{max-width:1320px;}
+.topnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+.brand img{width:36px;height:36px;border-radius:9px;}
+.brand .brand-name{font-family:var(--head);font-size:14px;color:var(--bright);letter-spacing:.3px;}
+.topnav-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;position:relative;}
+.topnav-actions a, .topnav-actions button{font-family:var(--mono);font-size:9.5px;color:var(--text);background:var(--panel);padding:7px 11px;border-radius:6px;text-decoration:none;border:1px solid var(--border);cursor:pointer;white-space:nowrap;}
+.topnav-actions a:hover, .topnav-actions button:hover{border-color:var(--accent);color:var(--accent);}
+.topnav-actions a.active{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb, var(--accent) 10%, transparent);}
+.nav-dropdown{position:relative;}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:190px;box-shadow:0 10px 28px -8px rgba(0,0,0,.25);z-index:50;flex-direction:column;gap:2px;}
+.nav-dropdown-menu.open{display:flex;}
+.nav-dropdown-menu a{background:none;border:none;text-align:left;padding:8px 10px;border-radius:5px;}
+.nav-dropdown-menu a:hover{background:var(--panel);}
+h1{font-family:var(--head);font-size:19px;color:var(--bright);margin-bottom:4px;}
+.subtitle{font-size:10.5px;color:var(--muted);margin-bottom:18px;}
+.backlink{font-size:10.5px;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:10px;}
+.backlink:hover{color:var(--accent);}
+.callout{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:6px;padding:14px 16px;font-size:11px;line-height:1.75;margin-bottom:20px;}
+.callout b{color:var(--bright);}
+.callout.warn{border-left-color:var(--red);}
+h2{font-family:var(--head);font-size:13.5px;letter-spacing:1px;color:var(--accent);margin:30px 0 12px;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:8px;}
+p.lead{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:14px;}
+.stat-row{display:flex;gap:22px;flex-wrap:wrap;margin:14px 0 22px;}
+.stat b{font-family:var(--head);font-size:18px;color:var(--bright);display:block;}
+.stat span{font-size:7.5px;color:var(--muted);letter-spacing:1px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;}
+.card b{color:var(--bright);font-family:var(--head);font-size:11px;}
+.card p{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.7;}
+.table-scroll{overflow-x:auto;margin-bottom:14px;}
+table{width:100%;min-width:600px;border-collapse:collapse;font-size:10.5px;}
+th{text-align:left;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);font-size:8.5px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;}
+td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+td a{color:var(--accent);text-decoration:none;}
+td a:hover{text-decoration:underline;}
+.pos{color:var(--green);} .neg{color:var(--red);}
+.badge{font-size:8px;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:999px;white-space:nowrap;display:inline-block;}
+.badge.long{background:rgba(21,128,61,.14);color:var(--green);}
+.badge.short{background:rgba(185,28,28,.14);color:var(--red);}
+.badge.flat{background:rgba(95,114,119,.14);color:var(--muted);}
+input[type=text], input[type=number]{font-family:var(--mono);font-size:11px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 12px;}
+input[type=text]:focus, input[type=number]:focus{outline:none;border-color:var(--accent);}
+button.primary{font-family:var(--head);font-size:10.5px;letter-spacing:.5px;color:#0b1620;background:var(--accent);border:none;padding:10px 18px;border-radius:6px;cursor:pointer;white-space:nowrap;}
+button.primary:hover{filter:brightness(1.1);}
+button.primary:disabled{opacity:.5;cursor:default;}
+.chip-toggle{font-size:10px;color:var(--text);background:var(--chip-bg);border:1px solid var(--border);padding:7px 12px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.chip-toggle input{cursor:pointer;}
+.loading,.error{font-family:var(--mono);font-size:11px;color:var(--muted);padding:20px 0;text-align:center;}
+.error{color:var(--red);}
+.footer-note{font-size:9.5px;color:var(--muted);margin-top:36px;padding-top:16px;border-top:1px solid var(--border);line-height:1.7;}
+.footer-note a{color:var(--accent);}
+@media (max-width:640px){.stat-row{gap:14px;}}
+
+.status-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 15px;margin-bottom:7px;}
+.status-row .name{font-size:10.5px;color:var(--text);}
+.status-row .name a{color:var(--muted);text-decoration:none;font-size:8.5px;display:block;margin-top:2px;}
+.status-dot{display:flex;align-items:center;gap:7px;font-size:9px;font-family:var(--head);letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;}
+.status-dot .dot{width:9px;height:9px;border-radius:50%;background:var(--muted);}
+.status-dot.ok .dot{background:var(--green);}
+.status-dot.fail .dot{background:var(--red);}
+.status-dot.pending .dot{background:var(--muted);animation:pulse 1.1s infinite;}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+#summary{font-size:10.5px;color:var(--muted);margin-bottom:16px;}
+#summary b{color:var(--bright);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav">
+    <a class="brand" href="index.html"><img src="icon-192.png" alt=""><span class="brand-name">GENITUS Master-Terminal</span></a>
+    <div class="topnav-actions">
+      <a href="index.html">🏠 Hub</a>
+      <a href="guide.html">🧭 Guide</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" id="toolsDropdownBtn" type="button" style="border-color:var(--accent);color:var(--accent);">🛠️ Cross-Cluster-Tools ▾</button>
+        <div class="nav-dropdown-menu" id="toolsDropdownMenu">
+          <a href="ticker-lookup.html">🔍 Ticker-Lookup</a>
+          <a href="leaderboard.html">🏆 Leaderboard</a>
+          <a href="combo-sandbox.html">🧪 Combo-Sandbox</a>
+          <a href="watchlist.html">⭐ Watchlist</a>
+          <a href="digest.html">📰 Wochen-Digest</a>
+          <a href="status.html" class="active">🩺 Status</a>
+        </div>
+      </div>
+      <a href="docs.html">📚 Docs</a>
+      <a href="methodology.html">⚖️ Methodik</a>
+      <button id="themeToggle" type="button">🌙 Dark Mode</button>
+    </div>
+  </div>
+  <h1>🩺 Status: Erreichbarkeit</h1>
+  <div class="subtitle">Live-Check beim Laden dieser Seite -- kein Hintergrund-Monitoring, kein Alarm, nur eine Momentaufnahme</div>
+
+  <div class="callout">
+  <b>Wie das gemessen wird:</b> ein Cross-Origin-<code>fetch(url, {mode:'no-cors'})</code> aus dem Browser heraus.
+  Das kann HTTP-Statuscodes nicht auslesen (opaque response) -- "OK" heißt hier "Netzwerk-Request erfolgreich
+  zugestellt", nicht zwingend "Seite zeigt exakt den erwarteten Inhalt". Für echte Inhaltsprüfung siehe die
+  einzelnen Cluster direkt.
+  </div>
+
+  <div id="summary">Prüfe…</div>
+
+  <h2>Cluster (14)</h2>
+  <div id="clusterList"></div>
+
+  <h2>APIs (Datenbasis für Ticker-Lookup, Combo-Sandbox, Watchlist, Digest)</h2>
+  <div id="apiList"></div>
+
+  <div class="footer-note">
+  Bekannte Dateneinschränkung aus früheren Sessions: der EOD-Proxy liefert bei <code>close</code> teils
+  unbereinigte (nicht split-adjustierte) Kurse -- <code>adjusted_close</code> ist die korrekte Basis für
+  Mehrjahres-Vergleiche über Aktiensplits hinweg. Details im <a href="docs.html">Docs &amp; Stack-Report</a>.
+  Zurück zum <a href="index.html">Master-Terminal</a>. © 2026 GENITUS INC.
+  </div>
+</div>
+<script>
+
+const THEME_KEY = 'genitus-master:theme';
+const themeBtn = document.getElementById('themeToggle');
+function applyTheme(dark) {
+  document.documentElement.classList.toggle('dark', dark);
+  themeBtn.textContent = dark ? '☀️ Light Mode' : '🌙 Dark Mode';
+  const meta = document.getElementById('themeColorMeta');
+  if (meta) meta.setAttribute('content', dark ? '#070f13' : '#f4f7fb');
+}
+applyTheme(localStorage.getItem(THEME_KEY) === 'dark');
+themeBtn.addEventListener('click', () => {
+  const dark = !document.documentElement.classList.contains('dark');
+  applyTheme(dark);
+  try { localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); } catch (e) {}
+});
+const toolsBtn = document.getElementById('toolsDropdownBtn');
+const toolsMenu = document.getElementById('toolsDropdownMenu');
+if (toolsBtn && toolsMenu) {
+  toolsBtn.addEventListener('click', (e) => { e.stopPropagation(); toolsMenu.classList.toggle('open'); });
+  document.addEventListener('click', () => toolsMenu.classList.remove('open'));
+}
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+
+
+const CLUSTERS = [["Dividend-Workshell","https://babybounce500.github.io/genitus-workshell/"],["Corporate-Workshell","https://babybounce500.github.io/genitus-corporate-workshell/"],["Charts-Terminal-Suite","https://babybounce500.github.io/genitus-charts-terminal/master-archiv.html"],["Charts-Bot","https://babybounce500.github.io/genitus-charts-bot/"],["Ticker-Terminal","https://babybounce500.github.io/genitus-ticker-terminal/"],["Midpoint-Strategien-Terminal","https://babybounce500.github.io/genitus-midpoint-terminal/strategies-hub.html"],["World-Data","https://babybounce500.github.io/genitus-world-data/"],["GoldShield AI Analysis Archive","https://babybounce500.github.io/goldshield-ai-analysis-archive/workshell.html"],["GENITUS Case Study","https://babybounce500.github.io/genitus-case-study/"],["GENITUS KIP Study","https://babybounce500.github.io/genitus-kip-study/"],["Rheinmetall-Report","https://babybounce500.github.io/genitus-rheinmetall-report/"],["Global 100","https://babybounce500.github.io/genitus-global-100/"],["AI-Fachvokabular-Glossar","https://babybounce500.github.io/ai-fachvokabular-glossar/"],["GitHub-Repos-Hub (extern)","https://ebooks-auflag-2.replit.app/github-repos/"]];
+const APIS = [["EOD-Proxy — historical","https://theserver-open-ai.replit.app/eod/historical/AAPL.US?from=2026-01-01"],["EOD-Proxy — realtime","https://theserver-open-ai.replit.app/eod/realtime/AAPL.US"]];
+
+function row(name, url) {
+  return '<div class="status-row" data-url="' + url + '">' +
+    '<div class="name">' + name + '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + url + '</a></div>' +
+    '<div class="status-dot pending"><span class="dot"></span><span class="label">Prüfe…</span></div>' +
+  '</div>';
+}
+
+document.getElementById('clusterList').innerHTML = CLUSTERS.map(c => row(c[0], c[1])).join('');
+document.getElementById('apiList').innerHTML = APIS.map(c => row(c[0], c[1])).join('');
+
+async function check(url) {
+  try {
+    await fetch(url, { mode: 'no-cors', cache: 'no-store', signal: AbortSignal.timeout(10000) });
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function runAll() {
+  const rows = document.querySelectorAll('.status-row');
+  let ok = 0, fail = 0;
+  for (const r of rows) {
+    const url = r.dataset.url;
+    const reachable = await check(url);
+    const dot = r.querySelector('.status-dot');
+    const label = r.querySelector('.label');
+    if (reachable) { dot.className = 'status-dot ok'; label.textContent = 'Erreichbar'; ok++; }
+    else { dot.className = 'status-dot fail'; label.textContent = 'Nicht erreichbar'; fail++; }
+    document.getElementById('summary').innerHTML = '<b>' + ok + '</b> erreichbar, <b>' + fail + '</b> nicht erreichbar, ' + (rows.length - ok - fail) + ' ausstehend…';
+  }
+  document.getElementById('summary').innerHTML = '<b>' + ok + '</b> von <b>' + rows.length + '</b> erreichbar' + (fail > 0 ? ', <b class="neg" style="color:var(--red);">' + fail + ' nicht erreichbar</b>' : '.');
+}
+runAll();
+</script>
+</body>
+</html>

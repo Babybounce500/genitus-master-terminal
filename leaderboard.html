@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENITUS Master-Terminal — Leaderboard</title>
+<meta name="description" content="Alle bereits veröffentlichten, echten Backtest-Ergebnisse aus GoldShield und Midpoint-Terminal in einer Tabelle -- nichts hier neu berechnet, jede Zeile zur Quelle verlinkt.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<meta name="theme-color" id="themeColorMeta" content="#f4f7fb">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#f4f7fb;--surface:#ffffff;--panel:#eaf1f5;--border:#d6e2ea;--accent:#b45309;--green:#15803d;--red:#b91c1c;--muted:#5f7277;--text:#1c2e34;--bright:#0b1620;--chip-bg:rgba(11,22,32,.045);--mono:'JetBrains Mono',monospace;--head:'Orbitron',sans-serif;}
+:root.dark{--bg:#070f13;--surface:#0d171a;--panel:#111e23;--border:#1e2d3d;--accent:#f0c040;--green:#22c55e;--red:#f87171;--muted:#7d97a0;--text:#dceef3;--bright:#f4f7fb;--chip-bg:rgba(255,255,255,.05);}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);line-height:1.6;transition:background .15s,color .15s;}
+.wrap{max-width:1020px;margin:0 auto;padding:22px 22px 70px;}
+.wrap.wide{max-width:1320px;}
+.topnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+.brand img{width:36px;height:36px;border-radius:9px;}
+.brand .brand-name{font-family:var(--head);font-size:14px;color:var(--bright);letter-spacing:.3px;}
+.topnav-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;position:relative;}
+.topnav-actions a, .topnav-actions button{font-family:var(--mono);font-size:9.5px;color:var(--text);background:var(--panel);padding:7px 11px;border-radius:6px;text-decoration:none;border:1px solid var(--border);cursor:pointer;white-space:nowrap;}
+.topnav-actions a:hover, .topnav-actions button:hover{border-color:var(--accent);color:var(--accent);}
+.topnav-actions a.active{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb, var(--accent) 10%, transparent);}
+.nav-dropdown{position:relative;}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:190px;box-shadow:0 10px 28px -8px rgba(0,0,0,.25);z-index:50;flex-direction:column;gap:2px;}
+.nav-dropdown-menu.open{display:flex;}
+.nav-dropdown-menu a{background:none;border:none;text-align:left;padding:8px 10px;border-radius:5px;}
+.nav-dropdown-menu a:hover{background:var(--panel);}
+h1{font-family:var(--head);font-size:19px;color:var(--bright);margin-bottom:4px;}
+.subtitle{font-size:10.5px;color:var(--muted);margin-bottom:18px;}
+.backlink{font-size:10.5px;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:10px;}
+.backlink:hover{color:var(--accent);}
+.callout{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:6px;padding:14px 16px;font-size:11px;line-height:1.75;margin-bottom:20px;}
+.callout b{color:var(--bright);}
+.callout.warn{border-left-color:var(--red);}
+h2{font-family:var(--head);font-size:13.5px;letter-spacing:1px;color:var(--accent);margin:30px 0 12px;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:8px;}
+p.lead{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:14px;}
+.stat-row{display:flex;gap:22px;flex-wrap:wrap;margin:14px 0 22px;}
+.stat b{font-family:var(--head);font-size:18px;color:var(--bright);display:block;}
+.stat span{font-size:7.5px;color:var(--muted);letter-spacing:1px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;}
+.card b{color:var(--bright);font-family:var(--head);font-size:11px;}
+.card p{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.7;}
+.table-scroll{overflow-x:auto;margin-bottom:14px;}
+table{width:100%;min-width:600px;border-collapse:collapse;font-size:10.5px;}
+th{text-align:left;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);font-size:8.5px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;}
+td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+td a{color:var(--accent);text-decoration:none;}
+td a:hover{text-decoration:underline;}
+.pos{color:var(--green);} .neg{color:var(--red);}
+.badge{font-size:8px;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:999px;white-space:nowrap;display:inline-block;}
+.badge.long{background:rgba(21,128,61,.14);color:var(--green);}
+.badge.short{background:rgba(185,28,28,.14);color:var(--red);}
+.badge.flat{background:rgba(95,114,119,.14);color:var(--muted);}
+input[type=text], input[type=number]{font-family:var(--mono);font-size:11px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 12px;}
+input[type=text]:focus, input[type=number]:focus{outline:none;border-color:var(--accent);}
+button.primary{font-family:var(--head);font-size:10.5px;letter-spacing:.5px;color:#0b1620;background:var(--accent);border:none;padding:10px 18px;border-radius:6px;cursor:pointer;white-space:nowrap;}
+button.primary:hover{filter:brightness(1.1);}
+button.primary:disabled{opacity:.5;cursor:default;}
+.chip-toggle{font-size:10px;color:var(--text);background:var(--chip-bg);border:1px solid var(--border);padding:7px 12px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.chip-toggle input{cursor:pointer;}
+.loading,.error{font-family:var(--mono);font-size:11px;color:var(--muted);padding:20px 0;text-align:center;}
+.error{color:var(--red);}
+.footer-note{font-size:9.5px;color:var(--muted);margin-top:36px;padding-top:16px;border-top:1px solid var(--border);line-height:1.7;}
+.footer-note a{color:var(--accent);}
+@media (max-width:640px){.stat-row{gap:14px;}}
+
+.cluster-tag{font-size:8px;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:999px;white-space:nowrap;display:inline-block;background:var(--chip-bg);color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="wrap wide">
+  <div class="topnav">
+    <a class="brand" href="index.html"><img src="icon-192.png" alt=""><span class="brand-name">GENITUS Master-Terminal</span></a>
+    <div class="topnav-actions">
+      <a href="index.html">🏠 Hub</a>
+      <a href="guide.html">🧭 Guide</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" id="toolsDropdownBtn" type="button" style="border-color:var(--accent);color:var(--accent);">🛠️ Cross-Cluster-Tools ▾</button>
+        <div class="nav-dropdown-menu" id="toolsDropdownMenu">
+          <a href="ticker-lookup.html">🔍 Ticker-Lookup</a>
+          <a href="leaderboard.html" class="active">🏆 Leaderboard</a>
+          <a href="combo-sandbox.html">🧪 Combo-Sandbox</a>
+          <a href="watchlist.html">⭐ Watchlist</a>
+          <a href="digest.html">📰 Wochen-Digest</a>
+          <a href="status.html">🩺 Status</a>
+        </div>
+      </div>
+      <a href="docs.html">📚 Docs</a>
+      <a href="methodology.html">⚖️ Methodik</a>
+      <button id="themeToggle" type="button">🌙 Dark Mode</button>
+    </div>
+  </div>
+  <h1>🏆 Leaderboard: validierte Strategien über alle Cluster</h1>
+  <div class="subtitle">Reine Lese-Tabelle -- fasst bereits veröffentlichte, echte Backtest-Zahlen zusammen, berechnet nichts neu</div>
+
+  <div class="callout warn">
+  <b>Scope, ehrlich benannt:</b> nur GoldShield und Midpoint-Terminal veröffentlichen durchgängig vergleichbare,
+  lookahead-freie Backtest-Kennzahlen (Sharpe bzw. "Sharpe-ähnlich", Trefferquote, Max-Drawdown) für konkrete
+  Handelsregeln. Der Rest des Stacks (Dividend-Suite, Charts-Terminal, World-Data) besteht größtenteils aus
+  <b>Screenern und Dashboards</b>, nicht aus Strategien mit einer einzelnen vergleichbaren Performance-Kennzahl
+  -- die gehören hier bewusst nicht rein, um keine Äpfel-Birnen-Vergleiche vorzutäuschen. Sharpe-Werte sind
+  zwischen Zeilen NICHT immer gleich annualisiert (×√52 bei wöchentlichen, ×√252 bei täglichen Renditen) --
+  Spalte "Basis" beachten.
+  </div>
+
+  <h2>GoldShield AI Analysis Archive (DAX-37, Donchian-Kanal-Familie)</h2>
+  <div class="table-scroll">
+  <table>
+  <thead><tr><th>Strategie</th><th>Kennzahl</th><th class="num">Wert</th><th>Basis</th><th>Befund</th><th>Quelle</th></tr></thead>
+  <tbody>
+    <tr><td>Kanal-Breakout + 4%-Stop (Baseline)</td><td>Sharpe</td><td class="num pos">0,56</td><td>wöchentlich, ×√52</td><td>Validierter Kern der ganzen Strategie-Familie</td><td><a href="https://babybounce500.github.io/goldshield-ai-analysis-archive/empfohlene-strategie.html" target="_blank" rel="noopener noreferrer">Empfohlene Strategie →</a></td></tr>
+    <tr><td>+ Trailing-Stop-Upgrade</td><td>Sharpe</td><td class="num pos">0,19 → 0,28</td><td>täglich, ×√252, 2 Zeithälften</td><td>Regime-abhängig (trendstarke Phasen), nicht universell</td><td><a href="https://babybounce500.github.io/goldshield-ai-analysis-archive/dax-breakout-report.html#trailing-winners" target="_blank" rel="noopener noreferrer">DAX-Breakout-Report →</a></td></tr>
+    <tr><td>RSI(14)-Mean-Reversion (eigenständig)</td><td>Sharpe</td><td class="num pos">0,32</td><td>wöchentlich, ×√52</td><td>Ruhigster Max-Drawdown im ganzen Archiv (-3,76%)</td><td><a href="https://babybounce500.github.io/goldshield-ai-analysis-archive/rsi-mean-reversion.html" target="_blank" rel="noopener noreferrer">RSI-Mean-Reversion-Tool →</a></td></tr>
+    <tr><td>Kanal + RSI kombiniert (50/50-Sleeve)</td><td>Sharpe</td><td class="num flat">gemischt</td><td>wöchentlich, ×√52</td><td>Negative Korrelation (-0,196, echte Diversifikation), schlägt Kanal-allein nur in trendstarker Hälfte</td><td><a href="https://babybounce500.github.io/goldshield-ai-analysis-archive/dax-breakout-report.html#channel-rsi-combo" target="_blank" rel="noopener noreferrer">DAX-Breakout-Report →</a></td></tr>
+  </tbody>
+  </table>
+  </div>
+
+  <h2>Midpoint-Strategien-Terminal (S&amp;P500 + DAX40, Konfluenz-Score-Familie)</h2>
+  <div class="table-scroll">
+  <table>
+  <thead><tr><th>Strategie</th><th>Kennzahl</th><th class="num">Wert</th><th>Basis</th><th>Befund</th><th>Quelle</th></tr></thead>
+  <tbody>
+    <tr><td>Contrarian (Score -4), Exit "bis Score-Umkehr"</td><td>Sharpe-ähnlich</td><td class="num pos">0,316</td><td>Trade-Simulation, 18.614 Einstiege</td><td>Trefferquote 75,94% -- beste Exit-Regel für Contrarian-Setup</td><td><a href="https://babybounce500.github.io/genitus-midpoint-terminal/midpoint-strategy.html" target="_blank" rel="noopener noreferrer">Midpoint-Strategy →</a></td></tr>
+    <tr><td>Momentum (Score +4), Exit "Fix 52 Wochen"</td><td>Sharpe-ähnlich</td><td class="num pos">0,379</td><td>Trade-Simulation, 28.370 Einstiege</td><td>Trefferquote 65,59% -- beste Exit-Regel für Momentum-Setup</td><td><a href="https://babybounce500.github.io/genitus-midpoint-terminal/midpoint-strategy.html" target="_blank" rel="noopener noreferrer">Midpoint-Strategy →</a></td></tr>
+    <tr><td>Konfluenz-Bucket Score -4 (voll bearish)</td><td>Ø Rendite 13W</td><td class="num pos">+6,01%</td><td>Bucket-Backtest, 276.643 Beob.</td><td>Baseline (unbedingt) +4,65% -- Mean-Reversion-Effekt, nicht Trendfortsetzung</td><td><a href="https://babybounce500.github.io/genitus-midpoint-terminal/midpoint-backtest.html" target="_blank" rel="noopener noreferrer">Midpoint-Backtest →</a></td></tr>
+    <tr><td>Konfluenz-Bucket Score +4 (voll bullish)</td><td>Ø Rendite 13W</td><td class="num flat">+4,12%</td><td>Bucket-Backtest, 276.643 Beob.</td><td>Leicht UNTER der Baseline -- stützt den Mean-Reversion-Befund</td><td><a href="https://babybounce500.github.io/genitus-midpoint-terminal/midpoint-backtest.html" target="_blank" rel="noopener noreferrer">Midpoint-Backtest →</a></td></tr>
+    <tr><td>Composite-Score, bestes Dezil (12M)</td><td>Trefferquote</td><td class="num pos">74,65%</td><td>Fundamental+Technical-Kombi</td><td>Schlechtestes Dezil nur 52,7% -- klare, nahezu monotone Abstufung</td><td><a href="https://babybounce500.github.io/genitus-midpoint-terminal/composite-score.html" target="_blank" rel="noopener noreferrer">Composite-Score →</a></td></tr>
+  </tbody>
+  </table>
+  </div>
+
+  <div class="footer-note">
+  AI-generierte, computationale Analyse -- keine Anlageberatung. Alle Zahlen hier sind aus den jeweiligen
+  Cluster-Reports übernommen (Stand der letzten dortigen Veröffentlichung), nicht in dieser Tabelle neu
+  nachgerechnet -- bei Zweifeln immer die verlinkte Quelle prüfen. Zurück zum
+  <a href="index.html">Master-Terminal</a>. © 2026 GENITUS INC.
+  </div>
+</div>
+<script>
+
+const THEME_KEY = 'genitus-master:theme';
+const themeBtn = document.getElementById('themeToggle');
+function applyTheme(dark) {
+  document.documentElement.classList.toggle('dark', dark);
+  themeBtn.textContent = dark ? '☀️ Light Mode' : '🌙 Dark Mode';
+  const meta = document.getElementById('themeColorMeta');
+  if (meta) meta.setAttribute('content', dark ? '#070f13' : '#f4f7fb');
+}
+applyTheme(localStorage.getItem(THEME_KEY) === 'dark');
+themeBtn.addEventListener('click', () => {
+  const dark = !document.documentElement.classList.contains('dark');
+  applyTheme(dark);
+  try { localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); } catch (e) {}
+});
+const toolsBtn = document.getElementById('toolsDropdownBtn');
+const toolsMenu = document.getElementById('toolsDropdownMenu');
+if (toolsBtn && toolsMenu) {
+  toolsBtn.addEventListener('click', (e) => { e.stopPropagation(); toolsMenu.classList.toggle('open'); });
+  document.addEventListener('click', () => toolsMenu.classList.remove('open'));
+}
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+
+</script>
+</body>
+</html>

@@ -10,32 +10,66 @@
 <meta name="theme-color" id="themeColorMeta" content="#f4f7fb">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f7fb;--surface:#ffffff;--panel:#eaf1f5;--border:#d6e2ea;--accent:#b45309;--green:#15803d;--red:#b91c1c;--muted:#5f7277;--text:#1c2e34;--bright:#0b1620;--mono:'JetBrains Mono',monospace;--head:'Orbitron',sans-serif;}
-:root.dark{--bg:#070f13;--surface:#0d171a;--panel:#111e23;--border:#1e2d3d;--accent:#f0c040;--green:#22c55e;--red:#f87171;--muted:#7d97a0;--text:#dceef3;--bright:#f4f7fb;}
+
+:root{--bg:#f4f7fb;--surface:#ffffff;--panel:#eaf1f5;--border:#d6e2ea;--accent:#b45309;--green:#15803d;--red:#b91c1c;--muted:#5f7277;--text:#1c2e34;--bright:#0b1620;--chip-bg:rgba(11,22,32,.045);--mono:'JetBrains Mono',monospace;--head:'Orbitron',sans-serif;}
+:root.dark{--bg:#070f13;--surface:#0d171a;--panel:#111e23;--border:#1e2d3d;--accent:#f0c040;--green:#22c55e;--red:#f87171;--muted:#7d97a0;--text:#dceef3;--bright:#f4f7fb;--chip-bg:rgba(255,255,255,.05);}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:var(--mono);line-height:1.6;transition:background .15s,color .15s;}
-.wrap{max-width:1020px;margin:0 auto;padding:30px 22px 70px;}
-.topnav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
-.backlink{font-size:10.5px;color:var(--muted);text-decoration:none;}
-.backlink:hover{color:var(--accent);}
-#themeToggle{font-family:var(--mono);font-size:10px;color:var(--text);background:var(--panel);padding:8px 13px;border-radius:6px;border:1px solid var(--border);cursor:pointer;}
-#themeToggle:hover{border-color:var(--accent);color:var(--accent);}
+.wrap{max-width:1020px;margin:0 auto;padding:22px 22px 70px;}
+.wrap.wide{max-width:1320px;}
+.topnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+.brand img{width:36px;height:36px;border-radius:9px;}
+.brand .brand-name{font-family:var(--head);font-size:14px;color:var(--bright);letter-spacing:.3px;}
+.topnav-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;position:relative;}
+.topnav-actions a, .topnav-actions button{font-family:var(--mono);font-size:9.5px;color:var(--text);background:var(--panel);padding:7px 11px;border-radius:6px;text-decoration:none;border:1px solid var(--border);cursor:pointer;white-space:nowrap;}
+.topnav-actions a:hover, .topnav-actions button:hover{border-color:var(--accent);color:var(--accent);}
+.topnav-actions a.active{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb, var(--accent) 10%, transparent);}
+.nav-dropdown{position:relative;}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:190px;box-shadow:0 10px 28px -8px rgba(0,0,0,.25);z-index:50;flex-direction:column;gap:2px;}
+.nav-dropdown-menu.open{display:flex;}
+.nav-dropdown-menu a{background:none;border:none;text-align:left;padding:8px 10px;border-radius:5px;}
+.nav-dropdown-menu a:hover{background:var(--panel);}
 h1{font-family:var(--head);font-size:19px;color:var(--bright);margin-bottom:4px;}
-.subtitle{font-size:10.5px;color:var(--muted);margin-bottom:20px;}
-.callout{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:6px;padding:14px 16px;font-size:11px;line-height:1.75;margin-bottom:22px;}
+.subtitle{font-size:10.5px;color:var(--muted);margin-bottom:18px;}
+.backlink{font-size:10.5px;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:10px;}
+.backlink:hover{color:var(--accent);}
+.callout{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:6px;padding:14px 16px;font-size:11px;line-height:1.75;margin-bottom:20px;}
 .callout b{color:var(--bright);}
-.stat-row{display:flex;gap:24px;flex-wrap:wrap;margin:14px 0 24px;}
-.stat b{font-family:var(--head);font-size:19px;color:var(--bright);display:block;}
-.stat span{font-size:7.8px;color:var(--muted);letter-spacing:1px;}
-h2{font-family:var(--head);font-size:13.5px;letter-spacing:1px;color:var(--accent);margin:32px 0 12px;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:8px;}
+.callout.warn{border-left-color:var(--red);}
+h2{font-family:var(--head);font-size:13.5px;letter-spacing:1px;color:var(--accent);margin:30px 0 12px;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:8px;}
 p.lead{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:14px;}
-.table-scroll{overflow-x:auto;margin-bottom:10px;}
-table{width:100%;min-width:720px;border-collapse:collapse;font-size:10.5px;}
+.stat-row{display:flex;gap:22px;flex-wrap:wrap;margin:14px 0 22px;}
+.stat b{font-family:var(--head);font-size:18px;color:var(--bright);display:block;}
+.stat span{font-size:7.5px;color:var(--muted);letter-spacing:1px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;}
+.card b{color:var(--bright);font-family:var(--head);font-size:11px;}
+.card p{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.7;}
+.table-scroll{overflow-x:auto;margin-bottom:14px;}
+table{width:100%;min-width:600px;border-collapse:collapse;font-size:10.5px;}
 th{text-align:left;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);font-size:8.5px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;}
 td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
 td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
 td a{color:var(--accent);text-decoration:none;}
 td a:hover{text-decoration:underline;}
+.pos{color:var(--green);} .neg{color:var(--red);}
+.badge{font-size:8px;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:999px;white-space:nowrap;display:inline-block;}
+.badge.long{background:rgba(21,128,61,.14);color:var(--green);}
+.badge.short{background:rgba(185,28,28,.14);color:var(--red);}
+.badge.flat{background:rgba(95,114,119,.14);color:var(--muted);}
+input[type=text], input[type=number]{font-family:var(--mono);font-size:11px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 12px;}
+input[type=text]:focus, input[type=number]:focus{outline:none;border-color:var(--accent);}
+button.primary{font-family:var(--head);font-size:10.5px;letter-spacing:.5px;color:#0b1620;background:var(--accent);border:none;padding:10px 18px;border-radius:6px;cursor:pointer;white-space:nowrap;}
+button.primary:hover{filter:brightness(1.1);}
+button.primary:disabled{opacity:.5;cursor:default;}
+.chip-toggle{font-size:10px;color:var(--text);background:var(--chip-bg);border:1px solid var(--border);padding:7px 12px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.chip-toggle input{cursor:pointer;}
+.loading,.error{font-family:var(--mono);font-size:11px;color:var(--muted);padding:20px 0;text-align:center;}
+.error{color:var(--red);}
+.footer-note{font-size:9.5px;color:var(--muted);margin-top:36px;padding-top:16px;border-top:1px solid var(--border);line-height:1.7;}
+.footer-note a{color:var(--accent);}
+@media (max-width:640px){.stat-row{gap:14px;}}
+
 .type-badge{font-size:8px;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:999px;white-space:nowrap;display:inline-block;}
 .type-shell{background:rgba(180,83,9,.12);color:var(--accent);}
 .type-hub{background:rgba(21,128,61,.12);color:var(--green);}
@@ -43,20 +77,33 @@ td a:hover{text-decoration:underline;}
 .term{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:10px;}
 .term b{color:var(--bright);font-family:var(--head);font-size:11px;}
 .term p{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.7;}
-.term .used-in{font-size:9px;color:var(--accent);margin-top:6px;}
 .datasrc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:10px;}
 .datasrc b{color:var(--bright);}
 .datasrc p{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.75;}
-.footer-note{font-size:9.5px;color:var(--muted);margin-top:36px;padding-top:16px;border-top:1px solid var(--border);line-height:1.7;}
-.footer-note a{color:var(--accent);}
-@media (max-width:640px){.stat-row{gap:16px;}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topnav">
-    <a href="index.html" class="backlink">← Zurück zum Master-Terminal</a>
-    <button id="themeToggle" type="button">🌙 Dark Mode</button>
+    <a class="brand" href="index.html"><img src="icon-192.png" alt=""><span class="brand-name">GENITUS Master-Terminal</span></a>
+    <div class="topnav-actions">
+      <a href="index.html">🏠 Hub</a>
+      <a href="guide.html">🧭 Guide</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" id="toolsDropdownBtn" type="button">🛠️ Cross-Cluster-Tools ▾</button>
+        <div class="nav-dropdown-menu" id="toolsDropdownMenu">
+          <a href="ticker-lookup.html">🔍 Ticker-Lookup</a>
+          <a href="leaderboard.html">🏆 Leaderboard</a>
+          <a href="combo-sandbox.html">🧪 Combo-Sandbox</a>
+          <a href="watchlist.html">⭐ Watchlist</a>
+          <a href="digest.html">📰 Wochen-Digest</a>
+          <a href="status.html">🩺 Status</a>
+        </div>
+      </div>
+      <a href="docs.html" class="active">📚 Docs</a>
+      <a href="methodology.html">⚖️ Methodik</a>
+      <button id="themeToggle" type="button">🌙 Dark Mode</button>
+    </div>
   </div>
   <h1>📚 GENITUS Stack — Docs &amp; Report</h1>
   <div class="subtitle">Architektur, Cluster-Referenz, Datenquellen und ein gemeinsames Glossar über den gesamten Stack</div>
@@ -64,14 +111,33 @@ td a:hover{text-decoration:underline;}
   <div class="callout">
   <b>Was das hier ist:</b> keine neue Behauptung, sondern die Zusammenfassung dessen, was über alle 14
   GENITUS-Cluster hinweg tatsächlich gebaut wurde -- als Nachschlagewerk für jeden, der sich im
-  <a href="index.html">Master-Terminal</a> zurechtfinden will, ohne jede einzelne Kachel selbst öffnen zu müssen.
+  <a href="index.html">Master-Terminal</a> zurechtfinden will. Für eine geführte Einführung statt einer
+  Nachschlage-Tabelle siehe den <a href="guide.html">🧭 Guide</a>.
   </div>
 
   <div class="stat-row">
     <div class="stat"><b>14</b><span>GITHUB-REPOS / CLUSTER</span></div>
     <div class="stat"><b>~150</b><span>EINZEL-TOOLS INSGESAMT</span></div>
+    <div class="stat"><b>6</b><span>NEUE CROSS-CLUSTER-TOOLS</span></div>
     <div class="stat"><b>0</b><span>EIGENE BACKEND-SERVER</span></div>
-    <div class="stat"><b>3</b><span>NAVIGATIONS-MUSTER</span></div>
+  </div>
+
+  <h2 id="crosstools">🆕 Neue Cross-Cluster-Tools</h2>
+  <p class="lead">Sechs Tools, die im Master-Terminal selbst leben (nicht in einem der 14 Cluster) -- jedes
+  arbeitet clusterübergreifend. Kurz-Tutorials dazu stehen im <a href="guide.html">Guide</a>, hier nur die
+  Kurzreferenz:</p>
+  <div class="table-scroll">
+  <table>
+  <thead><tr><th>Tool</th><th>Was es tut</th><th>Datenbasis</th></tr></thead>
+  <tbody>
+  <tr><td><a href="ticker-lookup.html">🔍 Ticker-Lookup</a></td><td>Ein Symbol, drei Live-Preissignale (Kanal, RSI, Konfluenz) gleichzeitig</td><td>Live, EOD-Proxy</td></tr>
+  <tr><td><a href="leaderboard.html">🏆 Leaderboard</a></td><td>Alle veröffentlichten Backtest-Zahlen aus GoldShield + Midpoint in einer Tabelle</td><td>Statisch, aus Cluster-Reports übernommen</td></tr>
+  <tr><td><a href="combo-sandbox.html">🧪 Combo-Sandbox</a></td><td>Signale per UND/ODER live kombinieren und über einen Korb backtesten</td><td>Live, EOD-Proxy</td></tr>
+  <tr><td><a href="watchlist.html">⭐ Watchlist</a></td><td>Eigene Symbole speichern (localStorage) mit Live-Signal-Badges</td><td>Live, EOD-Proxy + localStorage</td></tr>
+  <tr><td><a href="digest.html">📰 Wochen-Digest</a></td><td>Was hat sich bei der Watchlist in ~5 Handelstagen geändert?</td><td>Live, EOD-Proxy</td></tr>
+  <tr><td><a href="status.html">🩺 Status</a></td><td>Erreichbarkeits-Check aller 14 Cluster + Kern-APIs</td><td>Live, no-cors-Ping</td></tr>
+  </tbody>
+  </table>
   </div>
 
   <h2 id="architektur">Architektur: Hub-der-Hubs</h2>
@@ -119,9 +185,10 @@ td a:hover{text-decoration:underline;}
   <p class="lead">Nicht jedes einzelne der ~150 Tools wurde individuell auditiert -- das hier sind die
   Muster, die über mehrere Cluster hinweg wiederkehren und direkt aus den jeweiligen Seiten/Beschreibungen
   bestätigt sind:</p>
-  <div class="datasrc"><b>EOD-Proxy (theserver-open-ai.replit.app)</b><p>Trägt die GoldShield-AI-Analysis-Archive-Suite:
-  historische und Echtzeit-Kurse für Aktien, Krypto, Forex und Indizes, CORS-offen, kein eigener Backend-Server
-  nötig. <code>/eod/historical/{symbol}</code> und <code>/eod/realtime/{symbol}</code>.</p></div>
+  <div class="datasrc"><b>EOD-Proxy (theserver-open-ai.replit.app)</b><p>Trägt die GoldShield-AI-Analysis-Archive-Suite
+  UND alle sechs neuen Cross-Cluster-Tools: historische und Echtzeit-Kurse für Aktien, Krypto, Forex und
+  Indizes, CORS-offen, kein eigener Backend-Server nötig. <code>/eod/historical/{symbol}</code> und
+  <code>/eod/realtime/{symbol}</code>.</p></div>
   <div class="datasrc"><b>Yahoo-Finance-Endpunkte (live)</b><p>Mehrere Dividend-/Risk-Tools (u.a. "Live Risk")
   rechnen Sharpe/Sortino/VaR direkt aus täglichen Live-Kursdaten, ohne zwischengeschalteten Cache.</p></div>
   <div class="datasrc"><b>Kostenlose öffentliche APIs &amp; GitHub-Repos</b><p>Der gesamte World-Data-Cluster
@@ -146,7 +213,7 @@ td a:hover{text-decoration:underline;}
   billige Unternehmen mit hoher Kapitalrendite.</p></div>
   <div class="term"><b>Konfluenz-Score (Midpoint)</b><p>Summe aus 4 Zeitfenster-Signalen (1M/3M/6M/1Y): Kurs
   über/unter dem Mittelpunkt (Midpoint) seiner Hoch-Tief-Spanne, je +1/-1/0. Bereich -4 bis +4. Kern des
-  Midpoint-Strategien-Terminals.</p></div>
+  Midpoint-Strategien-Terminals und des neuen Ticker-Lookup/Combo-Sandbox.</p></div>
   <div class="term"><b>CAGR</b><p>Compound Annual Growth Rate -- geglättete Jahres-Wachstumsrate über einen
   Zeitraum, z.B. für Dividenden-Wachstum (5/10/20 Jahre).</p></div>
   <div class="term"><b>Markov-Kette</b><p>Zustands-Modell (z.B. Dividende: Increase/Flat/Cut/Suspended) mit
@@ -157,10 +224,10 @@ td a:hover{text-decoration:underline;}
   Faustregel-Kennzahl für Dividendenwachstums-Qualität.</p></div>
   <div class="term"><b>Donchian-Kanal / Channel-Breakout</b><p>Kanal = Max/Min der letzten N Schlusskurse
   (häufig 3 Wochen). Bricht der Kurs darüber/darunter aus, gilt das als Long-/Short-Signal. Kern der
-  GoldShield-Weekly-Breakout-Strategie.</p></div>
+  GoldShield-Weekly-Breakout-Strategie und des neuen Ticker-Lookup/Combo-Sandbox.</p></div>
   <div class="term"><b>RSI (Relative Strength Index)</b><p>Momentum-Oszillator 0-100, &lt;30 gilt als
   überverkauft, &gt;70 als überkauft. In GoldShield als eigenständige Gegentrend-Strategie validiert, in
-  Charts-Terminal als "Signals-Terminal"-Baustein.</p></div>
+  Charts-Terminal als "Signals-Terminal"-Baustein, in den neuen Cross-Cluster-Tools live nachgerechnet.</p></div>
   <div class="term"><b>Lookahead-Bias</b><p>Methodik-Fehler, bei dem ein Backtest versehentlich Informationen
   nutzt, die zum simulierten Zeitpunkt noch gar nicht verfügbar waren -- macht Ergebnisse unrealistisch gut.
   Alle hier referenzierten Backtests sind explizit als lookahead-frei dokumentiert.</p></div>
@@ -168,12 +235,13 @@ td a:hover{text-decoration:underline;}
   Equity-Kurve -- Standard-Risikokennzahl neben Sharpe.</p></div>
 
   <div class="footer-note">
-  AI-generierte, computationale Analyse -- keine Anlageberatung. Diese Doku fasst zusammen, verändert aber
-  nichts an den referenzierten Clustern selbst. Zurück zum <a href="index.html">Master-Terminal</a>.
-  © 2026 GENITUS INC.
+  AI-generierte, computationale Analyse -- keine Anlageberatung. Ausführlicher Disclaimer:
+  <a href="methodology.html">Methodik &amp; Disclaimer</a>. Diese Doku fasst zusammen, verändert aber nichts an
+  den referenzierten Clustern selbst. Zurück zum <a href="index.html">Master-Terminal</a>. © 2026 GENITUS INC.
   </div>
 </div>
 <script>
+
 const THEME_KEY = 'genitus-master:theme';
 const themeBtn = document.getElementById('themeToggle');
 function applyTheme(dark) {
@@ -188,9 +256,16 @@ themeBtn.addEventListener('click', () => {
   applyTheme(dark);
   try { localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); } catch (e) {}
 });
+const toolsBtn = document.getElementById('toolsDropdownBtn');
+const toolsMenu = document.getElementById('toolsDropdownMenu');
+if (toolsBtn && toolsMenu) {
+  toolsBtn.addEventListener('click', (e) => { e.stopPropagation(); toolsMenu.classList.toggle('open'); });
+  document.addEventListener('click', () => toolsMenu.classList.remove('open'));
+}
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
+
 </script>
 </body>
 </html>
