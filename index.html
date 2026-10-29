@@ -164,10 +164,10 @@ h2{font-family:var(--head);font-size:14px;letter-spacing:1.5px;color:var(--accen
   <div id="installedTag">✓ Als App installiert — läuft im eigenständigen Fenster.</div>
 
   <div class="toc">
-    <a href="#crosstools">🆕 Cross-Cluster-Tools</a>
     <a href="#terminals">🧩 Terminals &amp; Suiten</a>
     <a href="#reports">📄 Reports &amp; Studien</a>
     <a href="#sonstiges">🗂️ Sonstiges</a>
+    <a href="#crosstools">🆕 Cross-Cluster-Tools</a>
   </div>
 
   <div class="toolbar">
@@ -183,73 +183,6 @@ h2{font-family:var(--head);font-size:14px;letter-spacing:1.5px;color:var(--accen
   <div id="resultCount"></div>
 
   <div id="sectioned">
-    <h2 id="crosstools">🆕 Cross-Cluster-Tools</h2><div class="grid section-grid"><a class="tile" href="ticker-lookup.html" style="--tile-color:#0891b2;">
-    <div class="tile-badge">Neu</div>
-    <div class="tile-head"><span class="tile-icon">🔍</span><h3>Ticker-Lookup (360°)</h3></div>
-    <p class="tile-desc">Ein Symbol eingeben, drei Live-Preissignale aus verschiedenen GENITUS-Methodiken gleichzeitig sehen: Kanal-Breakout, RSI, Midpoint-Konfluenz -- clusterübergreifend, live berechnet, keine einzelne Kachel kann das allein.</p>
-    <div class="tile-chips"><span class="chip">Kanal-Breakout</span><span class="chip">RSI(14)</span><span class="chip">Midpoint-Konfluenz</span><span class="chip">Live</span></div>
-    <div class="tile-preview">
-      <iframe data-src="ticker-lookup.html" class="lazy-frame" scrolling="no" tabindex="-1"
-        style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
-      <div class="tile-fade"></div>
-    </div>
-    <div class="tile-open">Öffnen <span>→</span></div>
-  </a><a class="tile" href="leaderboard.html" style="--tile-color:#b45309;">
-    <div class="tile-badge">Neu</div>
-    <div class="tile-head"><span class="tile-icon">🏆</span><h3>Leaderboard</h3></div>
-    <p class="tile-desc">Alle bereits veröffentlichten, echten Backtest-Zahlen aus GoldShield und Midpoint-Terminal in einer Tabelle -- Sharpe, Trefferquote, Max-Drawdown nebeneinander, jede Zeile zur Original-Quelle verlinkt.</p>
-    <div class="tile-chips"><span class="chip">Sharpe</span><span class="chip">Trefferquote</span><span class="chip">GoldShield</span><span class="chip">Midpoint</span></div>
-    <div class="tile-preview">
-      <iframe data-src="leaderboard.html" class="lazy-frame" scrolling="no" tabindex="-1"
-        style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
-      <div class="tile-fade"></div>
-    </div>
-    <div class="tile-open">Öffnen <span>→</span></div>
-  </a><a class="tile" href="combo-sandbox.html" style="--tile-color:#7c3aed;">
-    <div class="tile-badge">Neu</div>
-    <div class="tile-head"><span class="tile-icon">🧪</span><h3>Combo-Sandbox</h3></div>
-    <p class="tile-desc">Kanal-Breakout, RSI und Midpoint-Konfluenz per UND/ODER live kombinieren und über einen eigenen Aktienkorb backtesten -- echte Trades, echte Trefferquote, lookahead-frei.</p>
-    <div class="tile-chips"><span class="chip">UND/ODER-Logik</span><span class="chip">Eigener Korb</span><span class="chip">Live-Backtest</span></div>
-    <div class="tile-preview">
-      <iframe data-src="combo-sandbox.html" class="lazy-frame" scrolling="no" tabindex="-1"
-        style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
-      <div class="tile-fade"></div>
-    </div>
-    <div class="tile-open">Öffnen <span>→</span></div>
-  </a><a class="tile" href="watchlist.html" style="--tile-color:#15803d;">
-    <div class="tile-badge">Neu</div>
-    <div class="tile-head"><span class="tile-icon">⭐</span><h3>Watchlist</h3></div>
-    <p class="tile-desc">Eigene Symbole speichern (nur lokal im Browser, kein Server) -- jedes automatisch mit Live-Kanal-/RSI-/Konfluenz-Signal annotiert.</p>
-    <div class="tile-chips"><span class="chip">localStorage</span><span class="chip">Live-Signale</span></div>
-    <div class="tile-preview">
-      <iframe data-src="watchlist.html" class="lazy-frame" scrolling="no" tabindex="-1"
-        style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
-      <div class="tile-fade"></div>
-    </div>
-    <div class="tile-open">Öffnen <span>→</span></div>
-  </a><a class="tile" href="digest.html" style="--tile-color:#be185d;">
-    <div class="tile-badge">Neu</div>
-    <div class="tile-head"><span class="tile-icon">📰</span><h3>Wochen-Digest</h3></div>
-    <p class="tile-desc">Live-Vergleich: was hat sich bei den Signalen deiner Watchlist in den letzten ~5 Handelstagen geändert? Kein Hintergrund-Job -- live bei jedem Aufruf neu berechnet.</p>
-    <div class="tile-chips"><span class="chip">Was hat sich geändert?</span><span class="chip">Live</span></div>
-    <div class="tile-preview">
-      <iframe data-src="digest.html" class="lazy-frame" scrolling="no" tabindex="-1"
-        style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
-      <div class="tile-fade"></div>
-    </div>
-    <div class="tile-open">Öffnen <span>→</span></div>
-  </a><a class="tile" href="status.html" style="--tile-color:#5f7277;">
-    <div class="tile-badge">Neu</div>
-    <div class="tile-head"><span class="tile-icon">🩺</span><h3>Status</h3></div>
-    <p class="tile-desc">Live-Erreichbarkeits-Check aller 14 Cluster-URLs plus der zentralen APIs, auf denen die Cross-Cluster-Tools basieren.</p>
-    <div class="tile-chips"><span class="chip">Health-Check</span><span class="chip">Live</span></div>
-    <div class="tile-preview">
-      <iframe data-src="status.html" class="lazy-frame" scrolling="no" tabindex="-1"
-        style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
-      <div class="tile-fade"></div>
-    </div>
-    <div class="tile-open">Öffnen <span>→</span></div>
-  </a></div>
     <h2 id="terminals">🧩 Terminals &amp; Suiten</h2><div class="grid section-grid"><a class="tile" href="https://babybounce500.github.io/genitus-workshell/" style="--tile-color:#b45309;">
     <div class="tile-badge">32 Tools</div>
     <div class="tile-head"><span class="tile-icon">💰</span><h3>Dividend-Workshell</h3></div>
@@ -402,6 +335,73 @@ h2{font-family:var(--head);font-size:14px;letter-spacing:1.5px;color:var(--accen
     <div class="tile-chips"><span class="chip">Repo-Katalog</span></div>
     <div class="tile-preview">
       <iframe data-src="https://ebooks-auflag-2.replit.app/github-repos/" class="lazy-frame" scrolling="no" tabindex="-1"
+        style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
+      <div class="tile-fade"></div>
+    </div>
+    <div class="tile-open">Öffnen <span>→</span></div>
+  </a></div>
+    <h2 id="crosstools">🆕 Cross-Cluster-Tools</h2><div class="grid section-grid"><a class="tile" href="ticker-lookup.html" style="--tile-color:#0891b2;">
+    <div class="tile-badge">Neu</div>
+    <div class="tile-head"><span class="tile-icon">🔍</span><h3>Ticker-Lookup (360°)</h3></div>
+    <p class="tile-desc">Ein Symbol eingeben, drei Live-Preissignale aus verschiedenen GENITUS-Methodiken gleichzeitig sehen: Kanal-Breakout, RSI, Midpoint-Konfluenz -- clusterübergreifend, live berechnet, keine einzelne Kachel kann das allein.</p>
+    <div class="tile-chips"><span class="chip">Kanal-Breakout</span><span class="chip">RSI(14)</span><span class="chip">Midpoint-Konfluenz</span><span class="chip">Live</span></div>
+    <div class="tile-preview">
+      <iframe data-src="ticker-lookup.html" class="lazy-frame" scrolling="no" tabindex="-1"
+        style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
+      <div class="tile-fade"></div>
+    </div>
+    <div class="tile-open">Öffnen <span>→</span></div>
+  </a><a class="tile" href="leaderboard.html" style="--tile-color:#b45309;">
+    <div class="tile-badge">Neu</div>
+    <div class="tile-head"><span class="tile-icon">🏆</span><h3>Leaderboard</h3></div>
+    <p class="tile-desc">Alle bereits veröffentlichten, echten Backtest-Zahlen aus GoldShield und Midpoint-Terminal in einer Tabelle -- Sharpe, Trefferquote, Max-Drawdown nebeneinander, jede Zeile zur Original-Quelle verlinkt.</p>
+    <div class="tile-chips"><span class="chip">Sharpe</span><span class="chip">Trefferquote</span><span class="chip">GoldShield</span><span class="chip">Midpoint</span></div>
+    <div class="tile-preview">
+      <iframe data-src="leaderboard.html" class="lazy-frame" scrolling="no" tabindex="-1"
+        style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
+      <div class="tile-fade"></div>
+    </div>
+    <div class="tile-open">Öffnen <span>→</span></div>
+  </a><a class="tile" href="combo-sandbox.html" style="--tile-color:#7c3aed;">
+    <div class="tile-badge">Neu</div>
+    <div class="tile-head"><span class="tile-icon">🧪</span><h3>Combo-Sandbox</h3></div>
+    <p class="tile-desc">Kanal-Breakout, RSI und Midpoint-Konfluenz per UND/ODER live kombinieren und über einen eigenen Aktienkorb backtesten -- echte Trades, echte Trefferquote, lookahead-frei.</p>
+    <div class="tile-chips"><span class="chip">UND/ODER-Logik</span><span class="chip">Eigener Korb</span><span class="chip">Live-Backtest</span></div>
+    <div class="tile-preview">
+      <iframe data-src="combo-sandbox.html" class="lazy-frame" scrolling="no" tabindex="-1"
+        style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
+      <div class="tile-fade"></div>
+    </div>
+    <div class="tile-open">Öffnen <span>→</span></div>
+  </a><a class="tile" href="watchlist.html" style="--tile-color:#15803d;">
+    <div class="tile-badge">Neu</div>
+    <div class="tile-head"><span class="tile-icon">⭐</span><h3>Watchlist</h3></div>
+    <p class="tile-desc">Eigene Symbole speichern (nur lokal im Browser, kein Server) -- jedes automatisch mit Live-Kanal-/RSI-/Konfluenz-Signal annotiert.</p>
+    <div class="tile-chips"><span class="chip">localStorage</span><span class="chip">Live-Signale</span></div>
+    <div class="tile-preview">
+      <iframe data-src="watchlist.html" class="lazy-frame" scrolling="no" tabindex="-1"
+        style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
+      <div class="tile-fade"></div>
+    </div>
+    <div class="tile-open">Öffnen <span>→</span></div>
+  </a><a class="tile" href="digest.html" style="--tile-color:#be185d;">
+    <div class="tile-badge">Neu</div>
+    <div class="tile-head"><span class="tile-icon">📰</span><h3>Wochen-Digest</h3></div>
+    <p class="tile-desc">Live-Vergleich: was hat sich bei den Signalen deiner Watchlist in den letzten ~5 Handelstagen geändert? Kein Hintergrund-Job -- live bei jedem Aufruf neu berechnet.</p>
+    <div class="tile-chips"><span class="chip">Was hat sich geändert?</span><span class="chip">Live</span></div>
+    <div class="tile-preview">
+      <iframe data-src="digest.html" class="lazy-frame" scrolling="no" tabindex="-1"
+        style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
+      <div class="tile-fade"></div>
+    </div>
+    <div class="tile-open">Öffnen <span>→</span></div>
+  </a><a class="tile" href="status.html" style="--tile-color:#5f7277;">
+    <div class="tile-badge">Neu</div>
+    <div class="tile-head"><span class="tile-icon">🩺</span><h3>Status</h3></div>
+    <p class="tile-desc">Live-Erreichbarkeits-Check aller 14 Cluster-URLs plus der zentralen APIs, auf denen die Cross-Cluster-Tools basieren.</p>
+    <div class="tile-chips"><span class="chip">Health-Check</span><span class="chip">Live</span></div>
+    <div class="tile-preview">
+      <iframe data-src="status.html" class="lazy-frame" scrolling="no" tabindex="-1"
         style="width:1200px;height:800px;transform:scale(0.3);transform-origin:top left;border:0;pointer-events:none;"></iframe>
       <div class="tile-fade"></div>
     </div>
